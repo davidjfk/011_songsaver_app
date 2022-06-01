@@ -1,74 +1,27 @@
 // import logo from './logo.svg';
-import {Container} from './components/styles/Container.styled'
-import AddSong from './components/AddSong.js'
-import Playlist from './components/Playlist.js'
-import './App.css';
+// import React from 'react'
+import {Routes, Route} from 'react-router-dom';
+import Navigation from './components/Navigation'
 
-import { useState } from 'react'
-
-function App() {
-
-  const [playlist, setPlaylist] = useState( [] )
+import Songsaver from './components/Songsaver';
+import About from './components/About';
+import GooglePlayStore from './components/GooglePlayStore';
 
 
-  // sample data:
-  //   [    
-  //     {
-  //         id: 1, 
-  //         title: "ACDC" ,
-  //         artist: "blah" ,
-  //         genre: "foo",
-  //         rating: 5,
-  //     },
-  //     {
-  //         id: 2, 
-  //         title: "Rolling Stones" ,
-  //         artist: "die" ,
-  //         genre: "bar",
-  //         rating: 5,
-  //     },
-  //     {
-  //         id: 3, 
-  //         title: "Beatles" ,
-  //         artist: "bla" ,
-  //         genre: "foo",
-  //         rating: 5,
-  //     },
-  //     {
-  //         id: 4, 
-  //         title: "Queen" ,
-  //         artist: "die" ,
-  //         genre: "bar",
-  //         rating: 5,
-  //     }
-  // ]
 
-  const addNewSongToPlaylist = ({title, artist,  genre, rating}) => {
-    console.log('click arrived in App.js')
-    // console.log(`new song: ${newSong}`)
-    console.log(`title: ${title}`)
-
-      const id = Math.floor(Math.random() * 100000) + 1;
-      // const newSongOnPlaylist = {id, title, artist, genre, rating };
-      
-      
-      // const newSongOnPlaylist = {id:5, title: "foo", artist:"bar", genre:"yeah", rating:"whoo" };
-      const newSongOnPlaylist = {id, title, artist, genre, rating};
-     
-      const newPlaylist = [...playlist]
-      newPlaylist.push(newSongOnPlaylist)
-
-      setPlaylist(newPlaylist);
-  }
-
-  
-
+const App = () => {
   return (
-    <>
-      <AddSong onAddNewSong={addNewSongToPlaylist}/>
-      <Playlist playlist={playlist}/>
-    </>
-  );
+    <div>
+      <Navigation />
+      <main>
+        <Routes>
+          <Route path='/songsaver' element={<Songsaver />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/googleplaystore' element={<GooglePlayStore />}/>
+        </Routes>
+      </main>
+    </div>
+  )
 }
 
-export default App;
+export default App
