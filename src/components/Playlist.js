@@ -1,52 +1,22 @@
 import React from 'react'
 import SongInPlaylist from './SongInPlaylist.js'
 import {Container} from './styles/Container.styled'
-import {StyledGrid} from './styles/Grid.styled'
-import {Column, Intro, Headers, NavigationArea, StyledPlaylistArea, Navigation1, Navigation2, Navigation3} from './styles/Grid.styled'
+import {StyledGridPlaylist} from './styles/GridPlaylist.styled'
+import {Column, Intro, Headers, NavigationArea, StyledPlaylistArea, Button1, Button2, Button3} from './styles/GridPlaylist.styled'
 
-const Playlist = () => {
+const Playlist = ({playlist}) => {
     
-    const songsMockData = 
-        [    
-            {
-                id: 1, 
-                title: "ACDC" ,
-                artist: "bla" ,
-                genre: "foo",
-                rating: 5,
-            },
-            {
-                id: 2, 
-                title: "Rolling Stones" ,
-                artist: "die" ,
-                genre: "bar",
-                rating: 5,
-            },
-            {
-                id: 3, 
-                title: "Beatles" ,
-                artist: "bla" ,
-                genre: "foo",
-                rating: 5,
-            },
-            {
-                id: 4, 
-                title: "Queen" ,
-                artist: "die" ,
-                genre: "bar",
-                rating: 5,
-            }
-        ];
-  
+console.log(playlist)
+   
     return (
     <>
     <Container> 
-        <StyledGrid>
+        <StyledGridPlaylist>
             <Intro>Playlist</Intro>
             <NavigationArea>
-                <Navigation1>a</Navigation1>
-                <Navigation2>b</Navigation2>
-                <Navigation3>c</Navigation3>
+                <Button1>a</Button1>
+                <Button2>b</Button2>
+                <Button3>c</Button3>
             </NavigationArea>
             <Headers>
                 <Column>
@@ -63,11 +33,11 @@ const Playlist = () => {
                 </Column>
             </Headers>
             <StyledPlaylistArea>
-                {songsMockData.map((item, id) => (
+                {playlist.map((item, id) => (
                         <SongInPlaylist key={id} item={item} />
                 ))}
             </StyledPlaylistArea>
-        </StyledGrid>
+        </StyledGridPlaylist>  
     </Container>
     </>
   )

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyledSongInPlaylist } from './styles/SongInPlaylist.styled'
-import {Row, Column} from './styles/Grid.styled'
+import {Row, Column} from './styles/GridPlaylist.styled'
 const SongInPlaylist = ({item}) => {
   return (
     <Row>
