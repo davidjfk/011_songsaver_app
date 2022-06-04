@@ -1,8 +1,12 @@
 import React from 'react'
 import { Container } from './styles/Container.styled'
+import ReduxExperiment from './ReduxExperiment'
 
 const About = () => {
+
+
   return (
+    
     <Container>
       <h1>story about myself and the project</h1>
         <p>
@@ -30,8 +34,10 @@ const About = () => {
           </ul>
           I have done some CSS in an early stage, because that feels like a more pleasant way to work with styled components.
         </p>
-        
-    </Container>
+         
+        <ReduxExperiment />
+    </Container> 
+
   )
 }
 
