@@ -38,6 +38,7 @@ export const Button1 = styled.button`
   padding: 0.25rem;
   width: 100%;
   height: 100%;
+  font-size: 1.6rem;
 `;
 export const Button2 = styled(Button1)``;
 export const Button3 = styled(Button1)``;

@@ -2,16 +2,18 @@ import React from 'react'
 import {Container} from './styles/Container.styled'
 import {StyledGridAddSong} from './styles/GridAddSong.styled'
 import {Column, Intro, Form} from './styles/GridAddSong.styled'
-import {StyledInputfield} from './styles/Inputfield.styled'
 import {StyledButton} from './styles/Button.styled'
+import { useDispatch } from "react-redux";
+import { addSongToPlaylist } from "./redux/playlist";
 
 import { useState } from 'react'
 
-const AddSong = ({onAddNewSong}) => {
+const AddSong = () => {
     const [title, setSongTitle] = useState('')
     const [artist, setArtist] = useState('')
     const [genre, setGenre] = useState("default")
     const [rating, setRating] = useState("default")
+    const dispatch = useDispatch();
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -20,17 +22,18 @@ const AddSong = ({onAddNewSong}) => {
           alert('Please add a song title and artist')
           return
         }   
-        // genre and rating are not required (imho)
+        // songsaver-user does not always know genre and nor rating, so fields can optionally be left blank.
 
         console.log(`songTitle: ${title}`)
         console.log(artist)
         console.log(genre)
         console.log(rating)
-        onAddNewSong({ title, artist, genre, rating })   
-        setSongTitle('')
-        setArtist('')
-        setGenre('default')
-        setRating('default')
+        dispatch(addSongToPlaylist({ title, artist, genre, rating }));   
+        //2do: after finishing project, activate following 4 lines of code:
+        // setSongTitle('')
+        // setArtist('')
+        // setGenre('default')
+        // setRating('default')
       }
 
   return (
@@ -44,7 +47,7 @@ const AddSong = ({onAddNewSong}) => {
                         placeholder='Add Song Title'
                         value={title}
                         onChange={(e) => setSongTitle(e.target.value)}
-                        style={{fontSize: "1.3rem"}}                        
+                        style={{fontSize: "1.6rem"}}                        
                     />
                 </Column>
                 <Column>
@@ -53,7 +56,7 @@ const AddSong = ({onAddNewSong}) => {
                             placeholder='Add artist'
                             value={artist}
                             onChange={(e) => setArtist(e.target.value)}
-                            style={{fontSize: "1.3rem"}}  
+                            style={{fontSize: "1.6rem"}}  
                         />
                 </Column>
                 <Column>
@@ -61,7 +64,7 @@ const AddSong = ({onAddNewSong}) => {
                         value={genre}
                         onChange={(e) => setGenre(e.target.value)}
                         name="genre"
-                        style={{fontSize: "1.3rem"}}  
+                        style={{fontSize: "1.6rem"}}  
                     > 
                         <option value="default" disabled hidden>
                             genre
@@ -78,7 +81,7 @@ const AddSong = ({onAddNewSong}) => {
                         value={rating}
                         onChange={(e) => setRating(e.target.value)}
                         name="rating"
-                        style={{fontSize: "1.3rem"}}  
+                        style={{fontSize: "1.6rem"}}  
                     > 
                         <option value="default" disabled hidden>
                             song rating

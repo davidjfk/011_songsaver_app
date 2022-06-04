@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+//2do: delete this component after having implemented 
+//the functionality to delete a song from the playlist.
 export const counterSlice = createSlice({
   name: "counter",
   initialState: {
