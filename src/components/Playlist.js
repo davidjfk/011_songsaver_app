@@ -17,7 +17,7 @@ const Playlist = () => {
     // ];
 
     const { playlist } = useSelector((state) => state.playlist);
-
+    console.log('state.playlist:')
     console.log(playlist)
    
     return (

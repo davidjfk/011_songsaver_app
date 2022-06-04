@@ -62,6 +62,7 @@ export const StyledPlaylistArea = styled.div`
 
 export const Row = styled.div`
   display: flex;
+  
 `
 
 export const Column = styled.div`
