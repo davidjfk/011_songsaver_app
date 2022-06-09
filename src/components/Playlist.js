@@ -58,6 +58,11 @@ const Playlist = () => {
 
         useEffect(() => {
             const sortArray = type => {
+            
+            if (!type) {
+                return setSortedMoviesInState(playlist);;
+            }  
+
             const types = {
                 country: 'country',
                 collection: 'collection',
@@ -82,6 +87,7 @@ const Playlist = () => {
 
             setSortedMoviesInState(sortedMovies);
             };
+
             sortArray(songObjectKeyToSortArrayWithSongs);
 
         }, [songObjectKeyToSortArrayWithSongs]); 
@@ -94,6 +100,9 @@ const Playlist = () => {
             <NavigationArea>
                 <Button1>
                     <select onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value)}> 
+                        
+                        <option value="">Sort by:</option>
+                        <option value="">do not sort</option>
                         <option value="country">Country</option>
                         <option value="collection">Collection</option>
                         <option value="releasedOn">Release Date</option>
