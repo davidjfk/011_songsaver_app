@@ -69,7 +69,7 @@ const AddSong = () => {
                         <option value="default" disabled hidden>
                             genre
                         </option>
-                        <option value="bluess">Bluess</option>
+                        <option value="blues">Blues</option>
                         <option value="jazz">Jazz</option>
                         <option value="motown">Motown</option>
                         <option value="pop">Pop</option>

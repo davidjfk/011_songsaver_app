@@ -7,40 +7,59 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 
 const Playlist = () => {
-    // const playlist = [
-    //     {
-    //         id:5, 
-    //         title: "mock data", 
-    //         artist:"foo", 
-    //         genre:"bar", 
-    //         rating: 18 
-    //     }
-    // ];
 
-    const { playlist } = useSelector((state) => state.playlist);
-    console.log('state.playlist:')
-    console.log(playlist)
+
+    // const { playlist } = useSelector((state) => state.playlist);
+    // console.log('state.playlist:')
+    // console.log(playlist)
    
+    const playlist = [
+        {
+            id:5, 
+            title: "g", 
+            artist:"foo1", 
+            genre:"pop", 
+            rating: 18 
+        }, 
+        {
+            id:6, 
+            title: "s", 
+            artist:"bar", 
+            genre:"reggae", 
+            rating: 3 
+        }, 
+        {
+            id:7, 
+            title: "m", 
+            artist:"golf", 
+            genre:"blues", 
+            rating: 9 
+        }
+    ];
+
+
+
+
     //2do: replace mock data 'movies' by data in 'playlist' from the redux-toolkit store. 
     const movies = [
         {
           id: 1,
           name: 'Matrix',
-          country: 9,
+          rating: 9,
           collection: 300, //in CRs
           releasedOn: 1999,
         },
         {
           id: 2,
           name: 'Tere Nam',
-          country: 3,
+          rating: 3,
           collection: 101,
           releasedOn: 2004,
         },
         {
           id: 3,
           name: 'Bahubali',
-          country: 4,
+          rating: 4,
           collection: 500,
           releasedOn: 1987,
         },
@@ -62,14 +81,15 @@ const Playlist = () => {
             if (!type) {
                 return setSortedMoviesInState(playlist);;
             }  
-
+            console.log('hi')
             const types = {
-                country: 'country',
-                collection: 'collection',
-                releasedOn: 'releasedOn',
+                title: 'title',
+                artist: 'artist',
+                genre: 'genre',
+                rating: 'rating',
             };
             const sortProperty = types[type];
-
+            console.log(sortProperty)
             /*
             I need to sort strings (songs, artist) and  int (stars).
             Use if (typeof(sortProperty) === String) {
@@ -81,10 +101,10 @@ const Playlist = () => {
                 but not {typeof(sortProperty}. Please investigate. `)
             }
             */
-            const sortedMovies = [...movies].sort((a, b) => b[sortProperty] - a[sortProperty]);
+            const sortedMovies = [...playlist].sort((a, b) => b[sortProperty] - a[sortProperty]);
             /*2do: sort strings (i.e. songs, artist) as well. I reuse my code from winc assignment
             'Big Arrays' for this task. */
-
+            console.log(sortedMovies)
             setSortedMoviesInState(sortedMovies);
             };
 
@@ -103,9 +123,10 @@ const Playlist = () => {
                         
                         <option value="">Sort by:</option>
                         <option value="">do not sort</option>
-                        <option value="country">Country</option>
-                        <option value="collection">Collection</option>
-                        <option value="releasedOn">Release Date</option>
+                        <option value="title">Title</option>
+                        <option value="artist">Artist</option>
+                        <option value="genre">Genre</option>
+                        <option value="rating">Rating</option>
                     </select>
                 </Button1>
                 <Button2>b</Button2>
@@ -126,7 +147,7 @@ const Playlist = () => {
                 </Column>
             </Headers>
             <StyledPlaylistArea>
-                {playlist.map((item, id) => (
+                {sortedMoviesInState.map((item, id) => (
                         <SongInPlaylist key={id} item={item} />
                 ))}
             </StyledPlaylistArea>
