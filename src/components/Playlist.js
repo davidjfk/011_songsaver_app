@@ -16,21 +16,21 @@ const Playlist = () => {
     const playlist = [
         {
             id:5, 
-            title: "g", 
+            title: "Doe Maar", 
             artist:"foo1", 
             genre:"pop", 
             rating: 18 
         }, 
         {
             id:6, 
-            title: "s", 
+            title: "Rolling Stones", 
             artist:"bar", 
             genre:"reggae", 
             rating: 3 
         }, 
         {
             id:7, 
-            title: "m", 
+            title: "Queen", 
             artist:"golf", 
             genre:"blues", 
             rating: 9 
@@ -89,23 +89,33 @@ const Playlist = () => {
                 rating: 'rating',
             };
             const sortProperty = types[type];
-            console.log(sortProperty)
-            /*
-            I need to sort strings (songs, artist) and  int (stars).
-            Use if (typeof(sortProperty) === String) {
 
-            } else if (typeof(sortProperty) === Number) {
-
+            console.log(`sortProperty: ${sortProperty}`)
+            console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
+            
+            //I need to sort strings (songs, artist) and  int (stars).
+            let sortedMovies;
+            if (sortProperty === "rating" || sortProperty === "")  {
+                sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                console.log(sortedMovies)
+                setSortedMoviesInState(sortedMovies);
+            } else if (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre") {
+                console.log('foo bar')
+                // sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                // song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true });
+                sortedMovies = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+                console.log(sortedMovies)
+                setSortedMoviesInState(sortedMovies);
+                // I choose 'en' as  the unicodeLanguage.
             } else {
                 console.error(`The sort functionality can only sort string and Number, 
-                but not {typeof(sortProperty}. Please investigate. `)
+                but not ${typeof(sortProperty)}. Please investigate. `)
             }
-            */
-            const sortedMovies = [...playlist].sort((a, b) => b[sortProperty] - a[sortProperty]);
+            
+            // setSortedMoviesInState(sortedMovies);
             /*2do: sort strings (i.e. songs, artist) as well. I reuse my code from winc assignment
             'Big Arrays' for this task. */
-            console.log(sortedMovies)
-            setSortedMoviesInState(sortedMovies);
+
             };
 
             sortArray(songObjectKeyToSortArrayWithSongs);
