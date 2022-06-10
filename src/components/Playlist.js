@@ -8,7 +8,8 @@ import { useState, useEffect } from 'react';
 
 const Playlist = () => {
 
-
+    // 2do: after completing the sort- and -filter functionality, replace the  mock data below (array playlist with songs) 
+    // with the playlist from the useSelector from the redux-toolkit store.: 
     // const { playlist } = useSelector((state) => state.playlist);
     // console.log('state.playlist:')
     // console.log(playlist)
@@ -19,7 +20,7 @@ const Playlist = () => {
             title: "Doe Maar", 
             artist:"foo1", 
             genre:"pop", 
-            rating: 18 
+            rating: 12 
         }, 
         {
             id:6, 
@@ -34,36 +35,15 @@ const Playlist = () => {
             artist:"golf", 
             genre:"blues", 
             rating: 9 
+        },
+        {
+            id:8, 
+            title: "ACDC", 
+            artist:"lima", 
+            genre:"pop", 
+            rating: 2 
         }
     ];
-
-
-
-
-    //2do: replace mock data 'movies' by data in 'playlist' from the redux-toolkit store. 
-    const movies = [
-        {
-          id: 1,
-          name: 'Matrix',
-          rating: 9,
-          collection: 300, //in CRs
-          releasedOn: 1999,
-        },
-        {
-          id: 2,
-          name: 'Tere Nam',
-          rating: 3,
-          collection: 101,
-          releasedOn: 2004,
-        },
-        {
-          id: 3,
-          name: 'Bahubali',
-          rating: 4,
-          collection: 500,
-          releasedOn: 1987,
-        },
-      ];
 
 
         // goal: put the array with movie objects in state. I want this to be local state in Playlist.js
@@ -73,49 +53,64 @@ const Playlist = () => {
         // goal: put the criterium in state, with which to sort the array with objects. 
         //I want this to be local state in Playlist.js
         const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('albums');
-        // source: inverse dataflow from jsx.
+        console.log(songObjectKeyToSortArrayWithSongs)
 
         useEffect(() => {
             const sortArray = type => {
-            
-            if (!type) {
-                return setSortedMoviesInState(playlist);;
-            }  
-            console.log('hi')
-            const types = {
-                title: 'title',
-                artist: 'artist',
-                genre: 'genre',
-                rating: 'rating',
-            };
-            const sortProperty = types[type];
+                if (!type) {
+                    return setSortedMoviesInState(playlist);;
+                }  
+                /*
+                A song type always contains 2 parts: 
+                First part is a song object type (e.g. title, artist, genre or rating)
+                Second part is either ascending or descending order.
+                First and second part must be separated by a space.
+                */
+                
+                let typeAsArray = type.split(' ');
+                let songObjectKey = typeAsArray[0];
+                let isAscending = typeAsArray[1] === "ascending" ? true : false;
 
-            console.log(`sortProperty: ${sortProperty}`)
-            console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
-            
-            //I need to sort strings (songs, artist) and  int (stars).
-            let sortedMovies;
-            if (sortProperty === "rating" || sortProperty === "")  {
-                sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-                console.log(sortedMovies)
-                setSortedMoviesInState(sortedMovies);
-            } else if (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre") {
-                console.log('foo bar')
-                // sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-                // song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true });
-                sortedMovies = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
-                console.log(sortedMovies)
-                setSortedMoviesInState(sortedMovies);
-                // I choose 'en' as  the unicodeLanguage.
-            } else {
-                console.error(`The sort functionality can only sort string and Number, 
-                but not ${typeof(sortProperty)}. Please investigate. `)
-            }
-            
-            // setSortedMoviesInState(sortedMovies);
-            /*2do: sort strings (i.e. songs, artist) as well. I reuse my code from winc assignment
-            'Big Arrays' for this task. */
+                console.log('hi')
+                const types = {
+                    title: 'title',
+                    artist: 'artist',
+                    genre: 'genre',
+                    // sorting by genre not a winc-assignment-requirement, but I may just as well add genre too.
+                    rating: 'rating',
+                };
+                const sortProperty = types[songObjectKey];
 
+                console.log(`sortProperty: ${sortProperty}`)
+                console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
+                
+                //I need to sort strings (songs, artist) and  int (stars).
+                let sortedMovies;
+                if (!isAscending && sortProperty === "rating" || sortProperty === "")  {
+                    sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                    console.log(sortedMovies)
+                    setSortedMoviesInState(sortedMovies);
+                    // numbers sort descending by default, so the !isAscending causes the rating to display in an ascending fashion. 
+                } else if (isAscending && sortProperty === "rating" || sortProperty === "")  {
+                    sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                    console.log(sortedMovies)
+                    setSortedMoviesInState(sortedMovies.reverse());
+                } else if (isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
+                    console.log('foo bar')
+                    sortedMovies = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+                    console.log(sortedMovies)
+                    setSortedMoviesInState(sortedMovies);
+                    // I choose 'en' as  the unicodeLanguage.
+                } else if (!isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
+                        console.log('foo bar')
+                        sortedMovies = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+                        console.log(sortedMovies)
+                        setSortedMoviesInState(sortedMovies.reverse());
+                        // I choose 'en' as  the unicodeLanguage.
+                } else {
+                    console.error(`The sort functionality can only sort string and Number, 
+                    but not datatype ${typeof(sortProperty)}. Please investigate. `)
+                }
             };
 
             sortArray(songObjectKeyToSortArrayWithSongs);
@@ -129,14 +124,19 @@ const Playlist = () => {
             <Intro>Playlist</Intro>
             <NavigationArea>
                 <Button1>
-                    <select onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value)}> 
-                        
-                        <option value="">Sort by:</option>
-                        <option value="">do not sort</option>
-                        <option value="title">Title</option>
-                        <option value="artist">Artist</option>
-                        <option value="genre">Genre</option>
-                        <option value="rating">Rating</option>
+                    <select 
+                        onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
+                    >                        
+                        <option value="" >Sort by:</option>
+                        <option value="" >do not sort</option>
+                        <option value="title ascending" >Title a-z</option>
+                        <option value="title descending" >Title z-a</option>
+                        <option value="artist ascending" >Artist a-z</option>
+                        <option value="artist descending" >Artist z-a</option>
+                        <option value="genre ascending" >Genre a-z</option>
+                        <option value="genre descending" >Genre z-a</option>
+                        <option value="rating ascending" >Rating 1-5</option>
+                        <option value="rating descending" >Rating 5-1</option>
                     </select>
                 </Button1>
                 <Button2>b</Button2>
