@@ -55,8 +55,6 @@ const Playlist = () => {
         const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
         console.log(songObjectKeyToSortArrayWithSongs)
 
-
-
         
         useEffect(() => {
             const sortArray = JsxSelectBoxOptionValue => {
