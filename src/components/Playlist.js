@@ -47,12 +47,12 @@ const Playlist = () => {
 
 
         // goal: put the array with movie objects in state. I want this to be local state in Playlist.js
-        const [sortedMoviesInState, setSortedMoviesInState] = useState([]);
+        const [sortedSongsInState, setsortedSongsInState] = useState([]);
         // source: smart component, business logic
 
         // goal: put the criterium in state, with which to sort the array with objects. 
         //I want this to be local state in Playlist.js
-        const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('albums');
+        const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
         console.log(songObjectKeyToSortArrayWithSongs)
 
 
@@ -61,7 +61,7 @@ const Playlist = () => {
         useEffect(() => {
             const sortArray = JsxSelectBoxOptionValue => {
                 if (!JsxSelectBoxOptionValue) {
-                    return setSortedMoviesInState(playlist);;
+                    return setsortedSongsInState(playlist);;
                 }  
                 /*
                 A JsxSelectBoxOptionValue always contains 2 parts: 
@@ -88,31 +88,30 @@ const Playlist = () => {
                 console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
                 
                 //I need to sort strings (songs, artist) and  int (stars).
-                let sortedMovies;
+                let sortedSongs;
                 if (!isAscending && sortProperty === "rating" || sortProperty === "")  {
-                    sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-                    console.log(sortedMovies)
-                    setSortedMoviesInState(sortedMovies);
+                    sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                    console.log(sortedSongs)
+                    setsortedSongsInState(sortedSongs);
                     // numbers sort descending by default, so the !isAscending causes the rating to display in an ascending fashion. 
                 } else if (isAscending && sortProperty === "rating" || sortProperty === "")  {
-                    sortedMovies = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-                    console.log(sortedMovies)
-                    setSortedMoviesInState(sortedMovies.reverse());
+                    sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                    console.log(sortedSongs)
+                    setsortedSongsInState(sortedSongs.reverse());
                 } else if (isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
                     console.log('foo bar')
-                    sortedMovies = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
-                    console.log(sortedMovies)
-                    setSortedMoviesInState(sortedMovies);
+                    sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+                    console.log(sortedSongs)
+                    setsortedSongsInState(sortedSongs);
                     // I choose 'en' as  the unicodeLanguage.
                 } else if (!isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
                         console.log('foo bar')
-                        sortedMovies = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
-                        console.log(sortedMovies)
-                        setSortedMoviesInState(sortedMovies.reverse());
+                        sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+                        console.log(sortedSongs)
+                        setsortedSongsInState(sortedSongs.reverse());
                         // I choose 'en' as  the unicodeLanguage.
                 } else {
-                    console.error(`The sort functionality can only sort string and Number, 
-                    but not datatype ${typeof(sortProperty)}. Please investigate. `)
+                    console.error(`component Playlist: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
                 }
             };
 
@@ -160,7 +159,7 @@ const Playlist = () => {
                 </Column>
             </Headers>
             <StyledPlaylistArea>
-                {sortedMoviesInState.map((item, id) => (
+                {sortedSongsInState.map((item, id) => (
                         <SongInPlaylist key={id} item={item} />
                 ))}
             </StyledPlaylistArea>
