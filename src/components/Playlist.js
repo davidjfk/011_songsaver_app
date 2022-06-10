@@ -10,40 +10,40 @@ const Playlist = () => {
 
     // 2do: after completing the sort- and -filter functionality, replace the  mock data below (array playlist with songs) 
     // with the playlist from the useSelector from the redux-toolkit store.: 
-    // const { playlist } = useSelector((state) => state.playlist);
-    // console.log('state.playlist:')
-    // console.log(playlist)
+    const { playlist } = useSelector((state) => state.playlist);
+    console.log('state.playlist:')
+    console.log(playlist)
    
-    const playlist = [
-        {
-            id:5, 
-            title: "Doe Maar", 
-            artist:"foo1", 
-            genre:"pop", 
-            rating: 12 
-        }, 
-        {
-            id:6, 
-            title: "Rolling Stones", 
-            artist:"bar", 
-            genre:"reggae", 
-            rating: 3 
-        }, 
-        {
-            id:7, 
-            title: "Queen", 
-            artist:"golf", 
-            genre:"blues", 
-            rating: 9 
-        },
-        {
-            id:8, 
-            title: "ACDC", 
-            artist:"lima", 
-            genre:"pop", 
-            rating: 2 
-        }
-    ];
+    // const playlist = [
+    //     {
+    //         id:5, 
+    //         title: "Doe Maar", 
+    //         artist:"foo1", 
+    //         genre:"pop", 
+    //         rating: 12 
+    //     }, 
+    //     {
+    //         id:6, 
+    //         title: "Rolling Stones", 
+    //         artist:"bar", 
+    //         genre:"reggae", 
+    //         rating: 3 
+    //     }, 
+    //     {
+    //         id:7, 
+    //         title: "Queen", 
+    //         artist:"golf", 
+    //         genre:"blues", 
+    //         rating: 9 
+    //     },
+    //     {
+    //         id:8, 
+    //         title: "ACDC", 
+    //         artist:"lima", 
+    //         genre:"pop", 
+    //         rating: 2 
+    //     }
+    // ];
 
 
         // goal: put the array with movie objects in state. I want this to be local state in Playlist.js
@@ -55,6 +55,9 @@ const Playlist = () => {
         const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('albums');
         console.log(songObjectKeyToSortArrayWithSongs)
 
+
+
+        
         useEffect(() => {
             const sortArray = type => {
                 if (!type) {
@@ -115,8 +118,8 @@ const Playlist = () => {
 
             sortArray(songObjectKeyToSortArrayWithSongs);
 
-        }, [songObjectKeyToSortArrayWithSongs]); 
-
+        }, [songObjectKeyToSortArrayWithSongs, playlist]); 
+        
     return (
     <>
     <Container> 
