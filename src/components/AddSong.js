@@ -24,10 +24,10 @@ const AddSong = () => {
         }   
         // songsaver-user does not always know genre and nor rating, so fields can optionally be left blank.
 
-        // console.log(`songTitle: ${title}`)
-        // console.log(artist)
-        // console.log(genre)
-        // console.log(rating)
+        console.log(`songTitle: ${title}`)
+        console.log(artist)
+        console.log(genre)
+        console.log(rating)
         dispatch(addSongToPlaylist({ title, artist, genre, rating }));   
         //2do: after finishing project, activate following 4 lines of code:
         // setSongTitle('')
@@ -69,7 +69,7 @@ const AddSong = () => {
                         <option value="default" disabled hidden>
                             genre
                         </option>
-                        <option value="bluess">Bluess</option>
+                        <option value="blues">Blues</option>
                         <option value="jazz">Jazz</option>
                         <option value="motown">Motown</option>
                         <option value="pop">Pop</option>

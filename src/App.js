@@ -15,7 +15,7 @@ const App = () => {
       <Navigation />
       <main>
         <Routes>
-          <Route path='/songsaver' element={<Songsaver />} />
+          <Route path='/' element={<Songsaver />} />
           <Route path='/about' element={<About />} />
           <Route path='/googleplaystore' element={<GooglePlayStore />}/>
         </Routes>
