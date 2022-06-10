@@ -59,18 +59,18 @@ const Playlist = () => {
 
         
         useEffect(() => {
-            const sortArray = type => {
-                if (!type) {
+            const sortArray = JsxSelectBoxOptionValue => {
+                if (!JsxSelectBoxOptionValue) {
                     return setSortedMoviesInState(playlist);;
                 }  
                 /*
-                A song type always contains 2 parts: 
+                A JsxSelectBoxOptionValue always contains 2 parts: 
                 First part is a song object type (e.g. title, artist, genre or rating)
                 Second part is either ascending or descending order.
                 First and second part must be separated by a space.
                 */
                 
-                let typeAsArray = type.split(' ');
+                let typeAsArray = JsxSelectBoxOptionValue.split(' ');
                 let songObjectKey = typeAsArray[0];
                 let isAscending = typeAsArray[1] === "ascending" ? true : false;
 
