@@ -11,8 +11,8 @@ const Playlist = () => {
     // 2do: after completing the sort- and -filter functionality, replace the  mock data below (array playlist with songs) 
     // with the playlist from the useSelector from the redux-toolkit store.: 
     const { playlist } = useSelector((state) => state.playlist);
-    console.log('state.playlist:')
-    console.log(playlist)
+    // console.log('state.playlist:')
+    // console.log(`line 15: ${playlist}`)
    
     // const playlist = [
     //     {
@@ -53,70 +53,188 @@ const Playlist = () => {
         // goal: put the criterium in state, with which to sort the array with objects. 
         //I want this to be local state in Playlist.js
         const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
-        console.log(songObjectKeyToSortArrayWithSongs)
+        // console.log(songObjectKeyToSortArrayWithSongs)
 
-        
+    /*
         useEffect(() => {
-            const sortArray = JsxSelectBoxOptionValue => {
-                if (!JsxSelectBoxOptionValue) {
-                    return setsortedSongsInState(playlist);;
-                }  
-                /*
-                A JsxSelectBoxOptionValue always contains 2 parts: 
-                First part is a song object type (e.g. title, artist, genre or rating)
-                Second part is either ascending or descending order.
-                First and second part must be separated by a space.
-                */
-                
-                let typeAsArray = JsxSelectBoxOptionValue.split(' ');
-                let songObjectKey = typeAsArray[0];
-                let isAscending = typeAsArray[1] === "ascending" ? true : false;
+                const sortArray = JsxSelectBoxOptionValue => {
+                    if (!JsxSelectBoxOptionValue) {
+                        return setsortedSongsInState(playlist);;
+                    }  
+                    
+                    // A JsxSelectBoxOptionValue always contains 2 parts: 
+                    // First part is a song object type (e.g. title, artist, genre or rating)
+                    // Second part is either ascending or descending order.
+                    // First and second part must be separated by a space.
+                    
+                    
+                    let typeAsArray = JsxSelectBoxOptionValue.split(' ');
+                    let songObjectKey = typeAsArray[0];
+                    let isAscending = typeAsArray[1] === "ascending" ? true : false;
 
-                console.log('hi')
-                const types = {
-                    title: 'title',
-                    artist: 'artist',
-                    genre: 'genre',
-                    // sorting by genre not a winc-assignment-requirement, but I may just as well add genre too.
-                    rating: 'rating',
-                };
-                const sortProperty = types[songObjectKey];
+                    console.log('hi')
+                    const types = {
+                        title: 'title',
+                        artist: 'artist',
+                        genre: 'genre',
+                        // sorting by genre not a winc-assignment-requirement, but I may just as well add genre too.
+                        rating: 'rating',
+                    };
+                    const sortProperty = types[songObjectKey];
 
-                console.log(`sortProperty: ${sortProperty}`)
-                console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
-                
-                //I need to sort strings (songs, artist) and  int (stars).
-                let sortedSongs;
-                if (!isAscending && sortProperty === "rating" || sortProperty === "")  {
-                    sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-                    console.log(sortedSongs)
-                    setsortedSongsInState(sortedSongs);
-                    // numbers sort descending by default, so the !isAscending causes the rating to display in an ascending fashion. 
-                } else if (isAscending && sortProperty === "rating" || sortProperty === "")  {
-                    sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-                    console.log(sortedSongs)
-                    setsortedSongsInState(sortedSongs.reverse());
-                } else if (isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
-                    console.log('foo bar')
-                    sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
-                    console.log(sortedSongs)
-                    setsortedSongsInState(sortedSongs);
-                    // I choose 'en' as  the unicodeLanguage.
-                } else if (!isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
+                    console.log(`sortProperty: ${sortProperty}`)
+                    console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
+                    
+                    //I need to sort strings (songs, artist) and  int (stars).
+                    let sortedSongs;
+                    if (!isAscending && (sortProperty === "rating" || sortProperty === ""))  {
+                        sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                        console.log(sortedSongs)
+                        setsortedSongsInState(sortedSongs);
+                        // numbers sort descending by default, so the !isAscending causes the rating to display in an ascending fashion. 
+                    } else if (isAscending && (sortProperty === "rating" || sortProperty === ""))  {
+                        sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+                        console.log(sortedSongs)
+                        setsortedSongsInState(sortedSongs.reverse());
+                    } else if (isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
                         console.log('foo bar')
                         sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
                         console.log(sortedSongs)
-                        setsortedSongsInState(sortedSongs.reverse());
+                        setsortedSongsInState(sortedSongs);
                         // I choose 'en' as  the unicodeLanguage.
-                } else {
-                    console.error(`component Playlist: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
-                }
-            };
+                    } else if (!isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
+                            console.log('foo bar')
+                            sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+                            console.log(sortedSongs)
+                            setsortedSongsInState(sortedSongs.reverse());
+                            // I choose 'en' as  the unicodeLanguage.
+                    } else {
+                        console.error(`component Playlist: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
+                    }
+                };
 
-            sortArray(songObjectKeyToSortArrayWithSongs);
+                //2do: switch back on!!
+                // sortArray(songObjectKeyToSortArrayWithSongs);
 
+            }, [songObjectKeyToSortArrayWithSongs, playlist]
+        ); 
+
+        */
+
+
+
+
+
+
+        /*
         }, [songObjectKeyToSortArrayWithSongs, playlist]); 
+        causes following bug: 
+        dependency 'playlist' causes bug: 'maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have
+        a dependency array, or one of the dependencies changes on every render.
+        solution instead of code below:
+        const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState(playlist);
+        do:
+        const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState();
+        */
+
+        const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState([]);
+        const [genreToFilterWith, setGenreToFilterWith] = useState("");
+        const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState("");
         
+        
+        
+        
+        const handleFilterGenreChange = (event) => {
+            console.log(`line 152: ${event.target.value}`)
+            setGenreToFilterWith(event.target.value);
+        };
+        
+        const handleFilterStarsChange = (event) => {
+            setRatingStarsToFilterWith(event.target.value);
+        };
+        
+        useEffect(() => {
+                // vscode wants me to put filterByRatingStars and filterByGenre inside the useEffect. Probably because these  fns are 
+                // only used inside this useEffect. But these fns are not state, so why bother. 2do: analyse this (later).  
+
+                const filterByRatingStars = (filteredData) => {
+                    // Avoid filter for null value
+                    if (!ratingStarsToFilterWith) {
+                    return filteredData;
+                    }
+                
+                    const filteredSongs = filteredData.filter(
+                        (song) => song.rating === ratingStarsToFilterWith
+                    );
+                    return filteredSongs;
+                };
+
+                const filterByGenre = (filteredData) => {
+                    // without a filter return all data.
+                    if (!genreToFilterWith) {
+                        console.log('line 178: no filter')
+                      return filteredData;
+                    }
+                                       
+                    const filteredGenres = filteredData.filter(
+                        (song) => 
+                        song.genre.indexOf(genreToFilterWith) !== -1 
+                    );
+                    // playlist = [
+                    //     {
+                    //         id:5, 
+                    //         title: "Doe Maar", 
+                    //         artist:"foo1", 
+                    //         genre:"pop", 
+                    //         rating: 12 
+                    //     }, 
+                    //     {
+                    //         id:6, 
+                    //         title: "Rolling Stones", 
+                    //         artist:"bar", 
+                    //         genre:"reggae", 
+                    //         rating: 3 
+                    //     }, 
+                    //     {
+                    //         id:7, 
+                    //         title: "Queen", 
+                    //         artist:"golf", 
+                    //         genre:"blues", 
+                    //         rating: 9 
+                    //     },
+                    //     {
+                    //         id:8, 
+                    //         title: "ACDC", 
+                    //         artist:"lima", 
+                    //         genre:"pop", 
+                    //         rating: 2 
+                    //     }
+                    // ];
+                    return filteredGenres;
+                };
+
+                let filteredData = filterByGenre(playlist);
+                filteredData = filterByRatingStars(filteredData);
+                setArrayFilteredWithGenresAndRatingStars(filteredData);
+            }, 
+            [genreToFilterWith, ratingStarsToFilterWith, playlist]
+        );
+
+
+
+        // combined useEffect (experimental)
+        // useEffect(() => {
+        //     let filteredData = filterByGenre(playlist);
+        //     filteredData = filterByRatingStars(filteredData);
+        //     setArrayFilteredWithGenresAndRatingStars(filteredData);
+        // }, 
+        // [sortedSongsInState, arrayFilteredWithGenresAndRatingStars, playlist]
+    // );      
+
+    // console.log('line 232')
+    // console.log(arrayFilteredWithGenresAndRatingStars)
+       
+
     return (
     <>
     <Container> 
@@ -139,8 +257,33 @@ const Playlist = () => {
                         <option value="rating descending" >Rating 5-1</option>
                     </select>
                 </Button1>
-                <Button2>b</Button2>
-                <Button3>c</Button3>
+                <Button2>
+                <select 
+                        onClick={(e) => handleFilterGenreChange(e)  }                 
+                    >                        
+                        <option value="" >Filter by:</option>
+                        <option value="" >do not filter</option>
+                        <option value="blues" >Blues</option>
+                        <option value="jazz" >jazz</option>
+                        <option value="motown" >motown</option>
+                        <option value="pop" >pop</option>
+                        <option value="reggae" >reggae</option>
+                    </select>
+
+                </Button2>
+                <Button3>
+                    <select 
+                        onChange={(e) => handleFilterStarsChange(e)  }                 
+                    >                        
+                        <option value="" >Filter by:</option>
+                        <option value="" >do not filter</option>
+                        <option value="1" >1 star</option>
+                        <option value="2" >2 stars</option>
+                        <option value="3" >3 stars</option>
+                        <option value="4" >4 stars</option>
+                        <option value="5" >5 stars</option>
+                    </select>
+                </Button3>
             </NavigationArea>
             <Headers>
                 <Column>
@@ -157,7 +300,10 @@ const Playlist = () => {
                 </Column>
             </Headers>
             <StyledPlaylistArea>
-                {sortedSongsInState.map((item, id) => (
+                {/* {sortedSongsInState.map((item, id) => (
+                        <SongInPlaylist key={id} item={item} />
+                ))} */}
+                {arrayFilteredWithGenresAndRatingStars.map((item, id) => (
                         <SongInPlaylist key={id} item={item} />
                 ))}
             </StyledPlaylistArea>
