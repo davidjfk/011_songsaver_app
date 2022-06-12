@@ -138,17 +138,28 @@ const Playlist = () => {
         */
 
         const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState([]);
-        const [genreToFilterWith, setGenreToFilterWith] = useState("");
+        const [genresToFilterWith, setGenreToFilterWith] = useState([]);
         const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState("");
         
         
         
         
         const handleFilterGenreChange = (event) => {
-            console.log(`line 152: ${event.target.value}`)
-            setGenreToFilterWith(event.target.value);
+            
+            // console.log(event.target.selectedOptions)
+            // analysis: selectedOptions has datatype HTMLCollection 
+            let value = Array.from(
+                event.target.selectedOptions, (option) => option.value
+            )   
+            console.log(`line 154: fn handleFilterGenreChange`)
+            console.log(value)
+
+            setGenreToFilterWith(value);
         };
         
+
+
+
         const handleFilterStarsChange = (event) => {
             setRatingStarsToFilterWith(event.target.value);
         };
@@ -156,6 +167,23 @@ const Playlist = () => {
         useEffect(() => {
                 // vscode wants me to put filterByRatingStars and filterByGenre inside the useEffect. Probably because these  fns are 
                 // only used inside this useEffect. But these fns are not state, so why bother? 2do: analyse this (later).  
+
+                const filterByGenre = (filteredData) => {
+                    // without a filter return all data.
+                    if (!genresToFilterWith ) {
+                        console.log('line 174: no filter')
+                      return filteredData;
+                    }
+                                       
+                    const filteredGenres = filteredData.filter(
+                        (song) => 
+                        
+                        song.genre.indexOf(genresToFilterWith) !== -1 
+                    );
+                    return filteredGenres;
+                };
+
+
 
                 const filterByRatingStars = (filteredData) => {
                     // Avoid filter for null value
@@ -169,56 +197,13 @@ const Playlist = () => {
                     return filteredSongs;
                 };
 
-                const filterByGenre = (filteredData) => {
-                    // without a filter return all data.
-                    if (!genreToFilterWith) {
-                        console.log('line 178: no filter')
-                      return filteredData;
-                    }
-                                       
-                    const filteredGenres = filteredData.filter(
-                        (song) => 
-                        
-                        song.genre.indexOf(genreToFilterWith) !== -1 
-                    );
-                    // playlist = [
-                    //     {
-                    //         id:5, 
-                    //         title: "Doe Maar", 
-                    //         artist:"foo1", 
-                    //         genre:"pop", 
-                    //         rating: 12 
-                    //     }, 
-                    //     {
-                    //         id:6, 
-                    //         title: "Rolling Stones", 
-                    //         artist:"bar", 
-                    //         genre:"reggae", 
-                    //         rating: 3 
-                    //     }, 
-                    //     {
-                    //         id:7, 
-                    //         title: "Queen", 
-                    //         artist:"golf", 
-                    //         genre:"blues", 
-                    //         rating: 9 
-                    //     },
-                    //     {
-                    //         id:8, 
-                    //         title: "ACDC", 
-                    //         artist:"lima", 
-                    //         genre:"pop", 
-                    //         rating: 2 
-                    //     }
-                    // ];
-                    return filteredGenres;
-                };
+
 
                 let filteredData = filterByGenre(playlist);
                 filteredData = filterByRatingStars(filteredData);
                 setArrayFilteredWithGenresAndRatingStars(filteredData);
             }, 
-            [genreToFilterWith, ratingStarsToFilterWith, playlist]
+            [genresToFilterWith, ratingStarsToFilterWith, playlist]
         );
 
 
@@ -243,7 +228,9 @@ const Playlist = () => {
             <Intro>Playlist</Intro>
             <NavigationArea>
                 <Button1>
+                {/* <div>sort playlist</div> */}
                     <select 
+                    
                         onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
                     >                        
                         <option value="" >Sort by:</option>
@@ -259,8 +246,11 @@ const Playlist = () => {
                     </select>
                 </Button1>
                 <Button2>
-                <select 
-                        onClick={(e) => handleFilterGenreChange(e)  }                 
+                    {/* <div>Filter by genre</div> */}
+                    <select 
+                        multiple={true}
+                        value={genresToFilterWith}
+                        onChange={(event) => handleFilterGenreChange(event)  }                 
                     >                        
                         <option value="" >Filter by genre:</option>
                         <option value="" >do not filter</option>
@@ -273,6 +263,7 @@ const Playlist = () => {
 
                 </Button2>
                 <Button3>
+                {/* <div>Filter by rating</div> */}
                     <select 
                         onChange={(e) => handleFilterStarsChange(e)  }                 
                     >                        
