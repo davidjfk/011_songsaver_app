@@ -158,9 +158,9 @@ const Playlist = () => {
         };
         
 
-
-
         const handleFilterStarsChange = (event) => {
+            // console.log(`line 164: fn handleFilterStarsChange`)
+            // console.log(event)
             setRatingStarsToFilterWith(event.target.value);
         };
         
@@ -169,18 +169,36 @@ const Playlist = () => {
                 // only used inside this useEffect. But these fns are not state, so why bother? 2do: analyse this (later).  
 
                 const filterByGenre = (filteredData) => {
+                   /* 
+                        I have (severely) modified my fn filterObjectsByArrayObjectKey from  winc assignment 'Big Arrays'
+                        ( https://github.com/davidjfk/WincAcademy/tree/master/54-js-webpage-big-arrays-and-objects-David-Sneek )
+                        to filter by genre on multiple genres at the same time:
+                   */
+                   
                     // without a filter return all data.
                     if (!genresToFilterWith ) {
                         console.log('line 174: no filter')
                       return filteredData;
+                    }   
+
+                    // status: code working for 1 selection criterium at the same time.
+                    // let filteredGenres = filteredData.filter(
+                    //     (song) =>           
+                    //     song.genre.indexOf(genresToFilterWith) !== -1 
+                    // );
+
+                    let  copyOfFilteredData = [...filteredData];
+                    let arrayFilteredOnOneCriterium;
+                    let arrayFilteredOnAllCriteria = [];
+                    for (let filtercriterium of genresToFilterWith) {
+                        console.log(`filtercriterium: ${filtercriterium}`)
+                        arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
+                            (song) =>           
+                            song.genre.indexOf(filtercriterium) !== -1 
+                        );
+                        arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
                     }
-                                       
-                    const filteredGenres = filteredData.filter(
-                        (song) => 
-                        
-                        song.genre.indexOf(genresToFilterWith) !== -1 
-                    );
-                    return filteredGenres;
+                    return arrayFilteredOnAllCriteria;
                 };
 
 
@@ -191,10 +209,16 @@ const Playlist = () => {
                     return filteredData;
                     }
                 
+                    // status: code working for 1 selection criterium at the same time.
                     const filteredSongs = filteredData.filter(
                         (song) => song.rating === ratingStarsToFilterWith
                     );
                     return filteredSongs;
+
+                    //2do: use case: as a user I select multiple ratings (e.g. 1 star and 2 stars combined) at the same time.
+
+
+
                 };
 
 
@@ -252,7 +276,7 @@ const Playlist = () => {
                         value={genresToFilterWith}
                         onChange={(event) => handleFilterGenreChange(event)  }                 
                     >                        
-                        <option value="" >Filter by genre:</option>
+                        <option value="" >Filter by Genre:</option>
                         <option value="" >do not filter</option>
                         <option value="blues" >Blues</option>
                         <option value="jazz" >jazz</option>
@@ -265,9 +289,11 @@ const Playlist = () => {
                 <Button3>
                 {/* <div>Filter by rating</div> */}
                     <select 
+                        multiple={true}
+                        value={ratingStarsToFilterWith}
                         onChange={(e) => handleFilterStarsChange(e)  }                 
                     >                        
-                        <option value="" >Filter by rating:</option>
+                        <option value="" >Filter by Rating:</option>
                         <option value="" >do not filter</option>
                         <option value="1" >1 star</option>
                         <option value="2" >2 stars</option>
