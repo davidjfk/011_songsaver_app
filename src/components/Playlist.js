@@ -139,7 +139,7 @@ const Playlist = () => {
 
         const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState([]);
         const [genresToFilterWith, setGenreToFilterWith] = useState([]);
-        const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState("");
+        const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState([]);
         
         
         
@@ -151,17 +151,20 @@ const Playlist = () => {
             let value = Array.from(
                 event.target.selectedOptions, (option) => option.value
             )   
-            console.log(`line 154: fn handleFilterGenreChange`)
-            console.log(value)
+            // console.log(`line 154: fn handleFilterGenreChange`)
+            // console.log(value)
 
             setGenreToFilterWith(value);
         };
         
 
         const handleFilterStarsChange = (event) => {
-            // console.log(`line 164: fn handleFilterStarsChange`)
-            // console.log(event)
-            setRatingStarsToFilterWith(event.target.value);
+            console.log(`line 164: fn handleFilterStarsChange`)
+            console.log(event)
+            let value = Array.from(
+                event.target.selectedOptions, (option) => option.value
+            )   
+            setRatingStarsToFilterWith(value);
         };
         
         useEffect(() => {
@@ -210,18 +213,27 @@ const Playlist = () => {
                     }
                 
                     // status: code working for 1 selection criterium at the same time.
-                    const filteredSongs = filteredData.filter(
-                        (song) => song.rating === ratingStarsToFilterWith
-                    );
-                    return filteredSongs;
+                    // const filteredSongs = filteredData.filter(
+                    //     (song) => song.rating === ratingStarsToFilterWith
+                    // );
+                    // return filteredSongs;
 
                     //2do: use case: as a user I select multiple ratings (e.g. 1 star and 2 stars combined) at the same time.
 
-
+                    let  copyOfFilteredData = [...filteredData];
+                    let arrayFilteredOnOneCriterium;
+                    let arrayFilteredOnAllCriteria = [];
+                    for (let ratingcriterium of ratingStarsToFilterWith) {
+                        console.log(`ratingcriterium: ${ratingcriterium}`)
+                        arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
+                            (song) =>           
+                            song.rating === ratingcriterium
+                        );
+                        arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
+                    }
+                    return arrayFilteredOnAllCriteria;
 
                 };
-
-
 
                 let filteredData = filterByGenre(playlist);
                 filteredData = filterByRatingStars(filteredData);
