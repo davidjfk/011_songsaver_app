@@ -155,7 +155,7 @@ const Playlist = () => {
         
         useEffect(() => {
                 // vscode wants me to put filterByRatingStars and filterByGenre inside the useEffect. Probably because these  fns are 
-                // only used inside this useEffect. But these fns are not state, so why bother. 2do: analyse this (later).  
+                // only used inside this useEffect. But these fns are not state, so why bother? 2do: analyse this (later).  
 
                 const filterByRatingStars = (filteredData) => {
                     // Avoid filter for null value
@@ -178,6 +178,7 @@ const Playlist = () => {
                                        
                     const filteredGenres = filteredData.filter(
                         (song) => 
+                        
                         song.genre.indexOf(genreToFilterWith) !== -1 
                     );
                     // playlist = [
@@ -261,7 +262,7 @@ const Playlist = () => {
                 <select 
                         onClick={(e) => handleFilterGenreChange(e)  }                 
                     >                        
-                        <option value="" >Filter by:</option>
+                        <option value="" >Filter by genre:</option>
                         <option value="" >do not filter</option>
                         <option value="blues" >Blues</option>
                         <option value="jazz" >jazz</option>
@@ -275,7 +276,7 @@ const Playlist = () => {
                     <select 
                         onChange={(e) => handleFilterStarsChange(e)  }                 
                     >                        
-                        <option value="" >Filter by:</option>
+                        <option value="" >Filter by rating:</option>
                         <option value="" >do not filter</option>
                         <option value="1" >1 star</option>
                         <option value="2" >2 stars</option>
