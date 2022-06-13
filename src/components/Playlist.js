@@ -336,12 +336,12 @@ const Playlist = () => {
 
                 // pipeline: 
                 // 2do: add the sort fn
-                // let pipelineData = sort
-                let pipelineData = filterByGenre(playlist);
+                let pipelineData = sortArray(songObjectKeyToSortArrayWithSongs);
+                pipelineData = filterByGenre(pipelineData);
                 pipelineData = filterByRatingStars(pipelineData);
                 setArrayFilteredWithGenresAndRatingStars(pipelineData);
             }, 
-            [ratingStarsToFilterWith, genresToFilterWith, playlist]
+            [songObjectKeyToSortArrayWithSongs, ratingStarsToFilterWith, genresToFilterWith, playlist]
         );
 
 
