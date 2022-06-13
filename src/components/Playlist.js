@@ -45,29 +45,103 @@ const Playlist = () => {
     //     }
     // ];
 
+        /* 2do: analysis: in order to get fn sortArray (below) inside my "pipeline" of the useEffect (see the currently 3
+                3 lines of code above the array with dependencies), I must replace var songObjectKeyToSortArrayWithStrings
+                by the helper variable 'pipelineData'. 
+        // goal: put the criterium in state, with which to sort the array with objects. 
+           scope: songObjectKeyToSortArrayWithSongs belongs to the local state of Playlist.js
+        */
+        const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
+        // console.log(songObjectKeyToSortArrayWithSongs)
+
+
 
         // goal: put the array with movie objects in state. I want this to be local state in Playlist.js
         const [sortedSongsInState, setsortedSongsInState] = useState([]);
         // source: smart component, business logic
 
-        // goal: put the criterium in state, with which to sort the array with objects. 
-        //I want this to be local state in Playlist.js
-        const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
-        // console.log(songObjectKeyToSortArrayWithSongs)
 
-    /*
-        useEffect(() => {
+
+         
+    
+        // useEffect(() => {
+        //         const sortArray = JsxSelectBoxOptionValue => {
+        //             if (!JsxSelectBoxOptionValue) {
+        //                 return setsortedSongsInState(playlist);
+        //             }  
+                    
+        //             // A JsxSelectBoxOptionValue always contains 2 parts: 
+        //             // First part is a song object type (e.g. title, artist, genre or rating)
+        //             // Second part is either ascending or descending order.
+        //             // First and second part must be separated by a space.
+                    
+                    
+        //             let typeAsArray = JsxSelectBoxOptionValue.split(' ');
+        //             let songObjectKey = typeAsArray[0];
+        //             let isAscending = typeAsArray[1] === "ascending" ? true : false;
+
+        //             console.log('hi')
+        //             const types = {
+        //                 title: 'title',
+        //                 artist: 'artist',
+        //                 genre: 'genre',
+        //                 // sorting by genre not a winc-assignment-requirement, but I may just as well add genre too.
+        //                 rating: 'rating',
+        //             };
+        //             const sortProperty = types[songObjectKey];
+
+        //             console.log(`sortProperty: ${sortProperty}`)
+        //             console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
+                    
+        //             //I need to sort strings (songs, artist) and  int (stars).
+        //             let sortedSongs;
+        //             if (!isAscending && (sortProperty === "rating" || sortProperty === ""))  {
+        //                 sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+        //                 console.log(sortedSongs)
+        //                 setsortedSongsInState(sortedSongs);
+        //                 // numbers sort descending by default, so the !isAscending causes the rating to display in an ascending fashion. 
+        //             } else if (isAscending && (sortProperty === "rating" || sortProperty === ""))  {
+        //                 sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
+        //                 console.log(sortedSongs)
+        //                 setsortedSongsInState(sortedSongs.reverse());
+        //             } else if (isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
+        //                 console.log('foo bar')
+        //                 sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+        //                 console.log(sortedSongs)
+        //                 setsortedSongsInState(sortedSongs);
+        //                 // I choose 'en' as  the unicodeLanguage.
+        //             } else if (!isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
+        //                     console.log('foo bar')
+        //                     sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
+        //                     console.log(sortedSongs)
+        //                     setsortedSongsInState(sortedSongs.reverse());
+        //                     // I choose 'en' as  the unicodeLanguage.
+        //             } else {
+        //                 console.error(`component Playlist: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
+        //             }
+        //         };
+
+        //         //2do: switch back on!!
+        //         sortArray(songObjectKeyToSortArrayWithSongs);
+
+        //     }, [songObjectKeyToSortArrayWithSongs, playlist]
+        // ); 
+
+
+
+        
                 const sortArray = JsxSelectBoxOptionValue => {
+                    console.log(`JsxSelectBoxOptionValue: ${JsxSelectBoxOptionValue}`)
                     if (!JsxSelectBoxOptionValue) {
-                        return setsortedSongsInState(playlist);;
+                        return playlist;
                     }  
                     
                     // A JsxSelectBoxOptionValue always contains 2 parts: 
                     // First part is a song object type (e.g. title, artist, genre or rating)
                     // Second part is either ascending or descending order.
                     // First and second part must be separated by a space.
-                    
-                    
+                    console.log(`line 133`)
+                    console.log(JsxSelectBoxOptionValue)
                     let typeAsArray = JsxSelectBoxOptionValue.split(' ');
                     let songObjectKey = typeAsArray[0];
                     let isAscending = typeAsArray[1] === "ascending" ? true : false;
@@ -116,10 +190,8 @@ const Playlist = () => {
                 //2do: switch back on!!
                 // sortArray(songObjectKeyToSortArrayWithSongs);
 
-            }, [songObjectKeyToSortArrayWithSongs, playlist]
-        ); 
 
-        */
+        
 
 
 
@@ -127,6 +199,7 @@ const Playlist = () => {
 
 
         /*
+        2do: throw this comment away:
         }, [songObjectKeyToSortArrayWithSongs, playlist]); 
         causes following bug: 
         dependency 'playlist' causes bug: 'maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have
@@ -137,10 +210,10 @@ const Playlist = () => {
         const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState();
         */
 
-        const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState([]);
+
         const [genresToFilterWith, setGenreToFilterWith] = useState([]);
         const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState([]);
-        
+        const [arrayFilteredWithGenresAndRatingStars, setArrayFilteredWithGenresAndRatingStars] = useState([]);
         
         
         
@@ -170,6 +243,14 @@ const Playlist = () => {
         useEffect(() => {
                 // vscode wants me to put filterByRatingStars and filterByGenre inside the useEffect. Probably because these  fns are 
                 // only used inside this useEffect. But these fns are not state, so why bother? 2do: analyse this (later).  
+
+
+
+
+
+
+
+
 
                 const filterByGenre = (filteredData) => {
                    /* 
@@ -234,12 +315,27 @@ const Playlist = () => {
                     return arrayFilteredOnAllCriteria;
 
                 };
+                // working code (without the sort functionality)
+                // let filteredData = filterByGenre(playlist);
+                // filteredData = filterByRatingStars(filteredData);
+                // setArrayFilteredWithGenresAndRatingStars(filteredData);
 
-                let filteredData = filterByGenre(playlist);
-                filteredData = filterByRatingStars(filteredData);
-                setArrayFilteredWithGenresAndRatingStars(filteredData);
+
+
+
+
+
+                // console.log(`line 318`)
+                // let filteredData = sortArray(songObjectKeyToSortArrayWithSongs)
+                // console.log(`line 320`)
+                // console.log(filteredData)
+
+
+                let pipelineData = filterByGenre(playlist);
+                pipelineData = filterByRatingStars(pipelineData);
+                setArrayFilteredWithGenresAndRatingStars(pipelineData);
             }, 
-            [genresToFilterWith, ratingStarsToFilterWith, playlist]
+            [ratingStarsToFilterWith, genresToFilterWith, playlist]
         );
 
 
