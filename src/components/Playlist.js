@@ -11,24 +11,20 @@ const Playlist = () => {
    
     const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
 
-    const sortArray = JsxSelectBoxOptionValue => {
-        console.log(`JsxSelectBoxOptionValue: ${JsxSelectBoxOptionValue}`)
+    const sortPlaylist = (playlist, JsxSelectBoxOptionValue) => {
         if (!JsxSelectBoxOptionValue) {
             return playlist;
         }  
         /*
-        A JsxSelectBoxOptionValue always contains 2 parts: 
+        A JsxSelectBoxOptionValue with the purpose to sort the playlist, contains (by my convention) 2 parts: 
         First part is a song object type (e.g. title, artist, genre or rating)
         Second part is either ascending or descending order.
         First and second part must be separated by a space.
         */
-        console.log(`line 133`)
-        console.log(JsxSelectBoxOptionValue)
         let typeAsArray = JsxSelectBoxOptionValue.split(' ');
         let songObjectKey = typeAsArray[0];
         let isAscending = typeAsArray[1] === "ascending" ? true : false;
 
-        console.log('hi')
         const types = {
             title: 'title',
             artist: 'artist',
@@ -36,32 +32,21 @@ const Playlist = () => {
             // sorting by genre not a winc-assignment-requirement, but it feels intuitive as a user to be able to sort on  genre as well.
             rating: 'rating',
         };
-        const sortProperty = types[songObjectKey];
-
-        console.log(`sortProperty: ${sortProperty}`)
-        console.log(`datatype of sortProperty: ${typeof(sortProperty)}`)
-        
-        //I need to sort strings (songs, artist) and  int (stars).
+        const sortProperty = types[songObjectKey];  
         let sortedSongs;
         if (!isAscending && (sortProperty === "rating" || sortProperty === ""))  {
             sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-            console.log(sortedSongs)
             return sortedSongs;
             // numbers sort descending by default, so the !isAscending causes the rating to display in an ascending fashion. 
         } else if (isAscending && (sortProperty === "rating" || sortProperty === ""))  {
             sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
-            console.log(sortedSongs)
             return sortedSongs.reverse();
         } else if (isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
-            console.log('foo bar')
             sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
-            console.log(sortedSongs)
             return sortedSongs;
             // I choose 'en' as  the unicodeLanguage.
         } else if (!isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
-                console.log('foo bar')
                 sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
-                console.log(sortedSongs)
                 return sortedSongs.reverse();
                 // I choose 'en' as  the unicodeLanguage.
         } else {
@@ -93,7 +78,7 @@ const Playlist = () => {
     };
     
     useEffect(() => {
-            const filterByGenre = (filteredData) => {
+            const filterByGenre = (filteredData, genresToFilterWith) => {
                 /* 
                     I have (severely) modified my fn filterObjectsByArrayObjectKey from  winc assignment 'Big Arrays'
                     ( https://github.com/davidjfk/WincAcademy/tree/master/54-js-webpage-big-arrays-and-objects-David-Sneek )
@@ -125,7 +110,7 @@ const Playlist = () => {
                 
             };
 
-            const filterByRatingStars = (filteredData) => {
+            const filterByRatingStars = (filteredData, ratingStarsToFilterWith) => {
                 let arrayFilteredOnAllCriteria = [];
                 console.log('line 305: no filter on rating')
                 console.log(ratingStarsToFilterWith)   
@@ -148,11 +133,21 @@ const Playlist = () => {
                 }
             };
 
-            // pipeline: 
-            let pipelineData = sortArray(songObjectKeyToSortArrayWithSongs);
-            pipelineData = filterByGenre(pipelineData);
-            pipelineData = filterByRatingStars(pipelineData);
+            /* 
+            user expect the playlist to sort first, then to order on genre and finally to filter on rating, so the precedence
+            (user expectation) is from left to right.
+            For this reason in the pipeline I filter on rating first, then filter on genre second and finally sort the playlist.
+            */
+            // let pipelineData = sortPlaylist(playlist, songObjectKeyToSortArrayWithSongs);
+            // pipelineData = filterByGenre(pipelineData, genresToFilterWith);
+            // pipelineData = filterByRatingStars(pipelineData, ratingStarsToFilterWith);
+            // setSortedAndOrFilteredArrayWithSongs(pipelineData);
+
+            let pipelineData = filterByRatingStars(playlist, ratingStarsToFilterWith);
+            pipelineData = filterByGenre(pipelineData, genresToFilterWith);
+            pipelineData = sortPlaylist(pipelineData, songObjectKeyToSortArrayWithSongs);
             setSortedAndOrFilteredArrayWithSongs(pipelineData);
+
         }, 
         [songObjectKeyToSortArrayWithSongs, ratingStarsToFilterWith, genresToFilterWith, playlist]
     );
