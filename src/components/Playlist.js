@@ -8,31 +8,23 @@ import { useState, useEffect } from 'react';
 
 const Playlist = () => {
     const { playlist } = useSelector((state) => state.playlist);
-   
     const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
-
-    const sortPlaylist = (playlist, JsxSelectBoxOptionValue) => {
-        if (!JsxSelectBoxOptionValue) {
+    const sortPlaylist = (playlist, JsxSelectBoxAttributeValue) => {
+        if (!JsxSelectBoxAttributeValue) {
             return playlist;
         }  
-        /*
-        A JsxSelectBoxOptionValue with the purpose to sort the playlist, contains (by my convention) 2 parts: 
-        First part is a song object type (e.g. title, artist, genre or rating)
-        Second part is either ascending or descending order.
-        First and second part must be separated by a space.
-        */
-        let typeAsArray = JsxSelectBoxOptionValue.split(' ');
-        let songObjectKey = typeAsArray[0];
-        let isAscending = typeAsArray[1] === "ascending" ? true : false;
+        let JsxSelectBoxAttributeValueAsArray = JsxSelectBoxAttributeValue.split(' ');
+        let songObjectKey = JsxSelectBoxAttributeValueAsArray[0];
+        let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
 
-        const types = {
+        const songPropertiesObject = {
             title: 'title',
             artist: 'artist',
             genre: 'genre',
-            // sorting by genre not a winc-assignment-requirement, but it feels intuitive as a user to be able to sort on  genre as well.
+            // 2do: remove genre from  the list after having completed the winc requirement 'categorize on genre' (on a separate feature branch).
             rating: 'rating',
         };
-        const sortProperty = types[songObjectKey];  
+        const sortProperty = songPropertiesObject[songObjectKey];  
         let sortedSongs;
         if (!isAscending && (sortProperty === "rating" || sortProperty === ""))  {
             sortedSongs = [...playlist].sort((song1, song2) => song2[sortProperty] - song1[sortProperty]);
@@ -59,18 +51,13 @@ const Playlist = () => {
     const [sortedAndOrFilteredArrayWithSongs, setSortedAndOrFilteredArrayWithSongs] = useState([]);
         
     const handleFilterGenreChange = (event) => {    
-        // analysis: selectedOptions has datatype HTMLCollection 
         let value = Array.from(
             event.target.selectedOptions, (option) => option.value
         )   
-
         setGenreToFilterWith(value);
     };
     
-
     const handleFilterStarsChange = (event) => {
-        console.log(`line 164: fn handleFilterStarsChange`)
-        console.log(event)
         let value = Array.from(
             event.target.selectedOptions, (option) => option.value
         )   
@@ -84,21 +71,14 @@ const Playlist = () => {
                     ( https://github.com/davidjfk/WincAcademy/tree/master/54-js-webpage-big-arrays-and-objects-David-Sneek )
                     to filter by genre on multiple genres at the same time:
                 */
-                let arrayFilteredOnAllCriteria = [];
-                console.log('line 271: no filter on genre:')   
-                console.log(genresToFilterWith)                 
-                // without a filter return all data.
+                let arrayFilteredOnAllCriteria = [];              
                 if (genresToFilterWith[0] === "" ) {
-                    console.log('line 275: no filter on genre')
-                    console.log(filteredData)
                     return filteredData;
                 }  else {
-                    console.log('foo bar')
-                    let  copyOfFilteredData = [...filteredData];
+                    let copyOfFilteredData = [...filteredData];
                     let arrayFilteredOnOneCriterium;
                     
                     for (let filtercriterium of genresToFilterWith) {
-                        console.log(`filtercriterium: ${filtercriterium}`)
                         arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                             (song) =>           
                             song.genre.indexOf(filtercriterium) !== -1 
@@ -106,23 +86,17 @@ const Playlist = () => {
                         arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
                     }
                     return arrayFilteredOnAllCriteria;
-                }
-                
+                } 
             };
 
             const filterByRatingStars = (filteredData, ratingStarsToFilterWith) => {
-                let arrayFilteredOnAllCriteria = [];
-                console.log('line 305: no filter on rating')
-                console.log(ratingStarsToFilterWith)   
+                let arrayFilteredOnAllCriteria = [];  
                 if (ratingStarsToFilterWith[0] === "") {
-                    console.log('line 309: no filter on rating')
-                    console.log(filteredData)
                 return filteredData;
                 } else {
                     let  copyOfFilteredData = [...filteredData];
                     let arrayFilteredOnOneCriterium;
                     for (let ratingcriterium of ratingStarsToFilterWith) {
-                        console.log(`ratingcriterium: ${ratingcriterium}`)
                         arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                             (song) =>           
                             parseInt(song.rating) === parseInt(ratingcriterium)
@@ -134,15 +108,10 @@ const Playlist = () => {
             };
 
             /* 
-            user expect the playlist to sort first, then to order on genre and finally to filter on rating, so the precedence
+            A user expect the playlist to sort first, then to order on genre and finally to filter on rating, so the precedence
             (user expectation) is from left to right.
             For this reason in the pipeline I filter on rating first, then filter on genre second and finally sort the playlist.
             */
-            // let pipelineData = sortPlaylist(playlist, songObjectKeyToSortArrayWithSongs);
-            // pipelineData = filterByGenre(pipelineData, genresToFilterWith);
-            // pipelineData = filterByRatingStars(pipelineData, ratingStarsToFilterWith);
-            // setSortedAndOrFilteredArrayWithSongs(pipelineData);
-
             let pipelineData = filterByRatingStars(playlist, ratingStarsToFilterWith);
             pipelineData = filterByGenre(pipelineData, genresToFilterWith);
             pipelineData = sortPlaylist(pipelineData, songObjectKeyToSortArrayWithSongs);
@@ -159,8 +128,7 @@ const Playlist = () => {
             <Intro>Playlist</Intro>
             <NavigationArea>
                 <Button1>
-                    <select 
-                    
+                    <select                    
                         onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
                     >                        
                         <option value="" >Sort by:</option>
