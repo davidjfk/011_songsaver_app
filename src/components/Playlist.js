@@ -9,6 +9,11 @@ import { useState, useEffect } from 'react';
 const Playlist = () => {
     const { playlist } = useSelector((state) => state.playlist);
     const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
+    const [sortedAndOrFilteredArrayWithSongs, setSortedAndOrFilteredArrayWithSongs] = useState([]);
+    const [genresToFilterWith, setGenreToFilterWith] = useState([""]);
+    const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState([""]);
+
+
     const sortPlaylist = (playlist, JsxSelectBoxAttributeValue) => {
         if (!JsxSelectBoxAttributeValue) {
             return playlist;
@@ -37,18 +42,14 @@ const Playlist = () => {
             sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedSongs;
             // I choose 'en' as  the unicodeLanguage.
+            // unicode allows user to enter songs and artists containing any kind of character (acdc,  2pac, ____45_____ , etc. ).
         } else if (!isAscending && (sortProperty === "title" || sortProperty === "artist" || sortProperty === "genre")) {
                 sortedSongs = [...playlist].sort((song1, song2) => song1[sortProperty].localeCompare(song2[sortProperty], 'en', { ignorePunctuation: true }));
                 return sortedSongs.reverse();
-                // I choose 'en' as  the unicodeLanguage.
         } else {
             console.error(`component Playlist: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
         }
     };
-
-    const [genresToFilterWith, setGenreToFilterWith] = useState([""]);
-    const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState([""]);
-    const [sortedAndOrFilteredArrayWithSongs, setSortedAndOrFilteredArrayWithSongs] = useState([]);
         
     const handleFilterGenreChange = (event) => {    
         let value = Array.from(
@@ -64,49 +65,51 @@ const Playlist = () => {
         setRatingStarsToFilterWith(value);
     };
     
+
+    const filterByGenre = (filteredData, genresToFilterWith) => {
+        /* 
+            I have (severely) modified my fn filterObjectsByArrayObjectKey from  winc assignment 'Big Arrays'
+            ( https://github.com/davidjfk/WincAcademy/tree/master/54-js-webpage-big-arrays-and-objects-David-Sneek )
+            to filter by genre on multiple genres at the same time:
+        */
+        let arrayFilteredOnAllCriteria = [];              
+        if (genresToFilterWith[0] === "" ) {
+            return filteredData;
+        }  else {
+            let copyOfFilteredData = [...filteredData];
+            let arrayFilteredOnOneCriterium;
+            
+            for (let filtercriterium of genresToFilterWith) {
+                arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
+                    (song) =>           
+                    song.genre.indexOf(filtercriterium) !== -1 
+                );
+                arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
+            }
+            return arrayFilteredOnAllCriteria;
+        } 
+    };
+
+    const filterByRatingStars = (filteredData, ratingStarsToFilterWith) => {
+        let arrayFilteredOnAllCriteria = [];  
+        if (ratingStarsToFilterWith[0] === "") {
+        return filteredData;
+        } else {
+            let  copyOfFilteredData = [...filteredData];
+            let arrayFilteredOnOneCriterium;
+            for (let ratingcriterium of ratingStarsToFilterWith) {
+                arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
+                    (song) =>           
+                    parseInt(song.rating) === parseInt(ratingcriterium)
+                );
+                arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
+            }
+            return arrayFilteredOnAllCriteria;
+        }
+    };
+
+
     useEffect(() => {
-            const filterByGenre = (filteredData, genresToFilterWith) => {
-                /* 
-                    I have (severely) modified my fn filterObjectsByArrayObjectKey from  winc assignment 'Big Arrays'
-                    ( https://github.com/davidjfk/WincAcademy/tree/master/54-js-webpage-big-arrays-and-objects-David-Sneek )
-                    to filter by genre on multiple genres at the same time:
-                */
-                let arrayFilteredOnAllCriteria = [];              
-                if (genresToFilterWith[0] === "" ) {
-                    return filteredData;
-                }  else {
-                    let copyOfFilteredData = [...filteredData];
-                    let arrayFilteredOnOneCriterium;
-                    
-                    for (let filtercriterium of genresToFilterWith) {
-                        arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
-                            (song) =>           
-                            song.genre.indexOf(filtercriterium) !== -1 
-                        );
-                        arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
-                    }
-                    return arrayFilteredOnAllCriteria;
-                } 
-            };
-
-            const filterByRatingStars = (filteredData, ratingStarsToFilterWith) => {
-                let arrayFilteredOnAllCriteria = [];  
-                if (ratingStarsToFilterWith[0] === "") {
-                return filteredData;
-                } else {
-                    let  copyOfFilteredData = [...filteredData];
-                    let arrayFilteredOnOneCriterium;
-                    for (let ratingcriterium of ratingStarsToFilterWith) {
-                        arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
-                            (song) =>           
-                            parseInt(song.rating) === parseInt(ratingcriterium)
-                        );
-                        arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
-                    }
-                    return arrayFilteredOnAllCriteria;
-                }
-            };
-
             /* 
             A user expect the playlist to sort first, then to order on genre and finally to filter on rating, so the precedence
             (user expectation) is from left to right.

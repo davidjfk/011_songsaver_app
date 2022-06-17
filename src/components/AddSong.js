@@ -30,10 +30,10 @@ const AddSong = () => {
         console.log(rating)
         dispatch(addSongToPlaylist({ title, artist, genre, rating }));   
         //2do: after finishing project, activate following 4 lines of code:
-        // setSongTitle('')
-        // setArtist('')
-        // setGenre('default')
-        // setRating('default')
+        setSongTitle('')
+        setArtist('')
+        setGenre('default')
+        setRating('default')
       }
 
   return (
