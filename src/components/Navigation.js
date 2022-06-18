@@ -9,7 +9,7 @@ const Navigation = () => {
       <Container> 
           <NavigationArea>
               <Button1>          
-                <NavLink  to='/songsaver'>
+                <NavLink  to='/'>
                   Songsaver
                 </NavLink>
               </Button1>
@@ -19,29 +19,14 @@ const Navigation = () => {
                 </NavLink>
               </Button2>
               <Button3>
-                <NavLink to='/about'>
-                  Google Play Store, 2do later
+                <NavLink to='/googleplaystore'>
+                  Google Play
                 </NavLink>
               </Button3>             
           </NavigationArea>
       </Container>
       </>
    )
-
-
-
-
-
-  //   <StyledNavigation>
-  //         <NavLink  to='/songsaver'>
-  //           Songsaver
-  //         </NavLink>
-
-  //         <NavLink  to='/about'>
-  //           About
-  //         </NavLink>
-  //   </StyledNavigation>
-  // );
 };
 
 export default Navigation;

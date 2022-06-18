@@ -1,24 +1,22 @@
-import React from 'react'
 import { Container } from './styles/Container.styled'
-import ReduxExperiment from './ReduxExperiment'
 
 const About = () => {
-
 
   return (
     
     <Container>
-      <h1>story about myself and the project</h1>
+      <h1>Story about myself and the project</h1>
         <p>
-          React is fun and offers (ample) opportunity to practice (and improve  :)  my vanilla js skills on the fly.
+          React is fun and I have learned a lot from this exercise. I have used assignment songsaver for a deepdive into React.
         </p>
 
         <p>
-          My aim is to learn how to make use of the following npm libraries in this project:
+          I have used the following tools:
           <ol>
-          <li>styled components</li>
           <li>router</li>
           <li>redux</li>
+          <li>vanilla js</li>
+          <li>styled components</li>
           </ol>
         </p>
 
@@ -32,10 +30,8 @@ const About = () => {
            <li>in which component each piece of state should reside</li>
            <li>inverse data flow</li>
           </ul>
-          I have done some CSS in an early stage, because that feels like a more pleasant way to work with styled components.
         </p>
          
-        <ReduxExperiment />
     </Container> 
 
   )

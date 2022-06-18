@@ -1,7 +1,168 @@
 
 
-# Design considerations:
+# Design / planning:
 
+# Date: June 18
+  Status: winc task categorize is ready.  Last task, left to do is styling, see 2do-list below. 
+  Time to implement: 10 hours (instead of the estimated 5)
+  
+  evaluation:
+  2 things did not go according to plan:
+    nr 1 of 2:
+    see bullit 1 from June 17:
+    instead of: 
+            - show all genres in 1 playlist (default option) ('M')
+            - show all genres, with each genre in its own playlist ('N')
+            - show 1 or more genres in a separate playlist. ('N')
+
+    I only implemented: 
+            - show all genres in 1 playlist (default option) ('M')
+            - show all genres, with each genre in its own playlist ('N')
+    reason:
+            - show 1 or more genres in a separate playlist. ('N') --> this option is already a filter in the component Playlist, so this would be redundant / of little extra value. It would also make the code more complex, so it was not worth it.
+    
+    
+    nr 2 of 2: the useEffect hook in component Playlist required me to change the plan from yesterday:
+    categorize-song-functionality must connect with each pipeline in each useEffect hook for each playlist separately. So if I show all playlists (i.e. 1 playlist for each genre), then the categorize-song-functionality
+    is/stays/becomes part of the local state of each separate playlist. That means that for example in playlist of genre 'blues' I sort on artist from A-Z, while at the same time in e.g. playlist of genre 'jazz' I sort on artist from Z-A. 
+
+    So instead of (see bullit 3 from June 17):
+                 In component CategorizeSong:
+                {arrayWithSongCategoryArrays.map((arrayWithOneSongCategory, id) => (
+                        <Playlist key={id} item={arrayWithOneSongCategory} />
+                ))}
+    this means that instead of passing a playlist of songs filtered on genre from component 'CategorizeSong' into each component 'Playlist', I created the playlist with songs for each genre for each component Playlist inside each component 
+    Playlist itself.  Without this the useEffect hook inside each component Playlist would not have worked. 
+    The preparation from yesterday did allow me to quickly figure out the problem and the solution.  
+
+
+
+    2do-list: (first 4 from braindump from June 17)
+    1. style select boxes (1 styling for all)
+    2. onMouseOver on select boxes: press 'Ctrl' to select multiple options'.  
+    3. use styled component theme provider for default styling: font size, font type, etc.
+    4. media queries (in grid components) for mobile size. 
+    5. in components 'GridNavigation.styled.js' and 'GridPlaylist.styled.js' change the button-element into e.g. a second-element, to make the code more semantic.  
+
+
+
+
+
+# Date: June 17
+* Intro
+    goal: implement winc task categorize: each genre gets its own list and the song you add ends up with the respective genre.
+    
+* situation
+    component Playlist.js:
+    1. is child component of Songsaver.js.  Songsaver.js contains components AddSong.js and Playlist.js
+    2. receives playlist.js from  redux-toolkit slice.  
+    3. has  sort functionality with only local state (inside component Playlist.js)
+    4. has filter functionality with only local state (inside component Playlist.js)
+    5. component Playlist maps over array playlist.js with the songs, with component SongInPlaylist returning for each item  in the array.
+
+* design:
+    * component Songsaver shows either:
+       - a) the current situation (see above), or:
+       - b) or child component 'CategorizeSong': CategorizeSong maps  over array playlist.js with the songs, with component Playlist (with SongInPlaylist still  nested inside Playlist.js) returning for each item  in the array.
+       - wether it will be a) or (one of the options inside) b) will depend on what the user selects inside select box 'Categorize by Genre' (explained further below)
+    To  implement this:  
+    * Inside component Songsaver:
+
+        1. create (grid-based: reuse grid code from other components) child component DisplaySongsInTheirOwnPlaylistForEachCategory. Inside this component, that only contains display logic, create selectbox 'Categorize by Genre' with options:
+            
+            - show all genres in 1 playlist (default option) ('M')
+            - show all genres, with each genre in its own playlist ('N')
+            - show 1 or more genres in a separate playlist. ('N')
+            I need a boolean to switch between this option ('M') and all other options ('N') in this select box: 'isShowAllGenresInOnePlaylist'. select box 'Categorize by Genre' must set this boolean (based on which option is selected). Next, this boolean must be made available (use redux-toolkit slice with useLocator hook) in component 'Songsaver'.
+            
+            Save the selected genre(s) in an array (1 or more genres, depending on the nr of genres that you select). This array must be made availabe (use redux-toolkit slice with useLocator hook) in component 'categorizeSong'.
+
+            So select box 'Categorize by Genre' provides 2 pieces of state: one piece will be used in  component Songsaver, and one piece will be used in component 'categorizeSong'. 
+            
+           (time: 20 min) (time so far: 1.5 hours)
+
+        2. create (inside SongSaver) (empty) child  component 'CategorizeSong' that will only contain business logic.  (time: 15 min)
+
+
+            The result (inside component Songsaver) will look roughly like this: 
+
+                import { useSelector } from "react-redux";
+
+                function Songsaver() {
+                    const { playlist } = useSelector((state) => state.playlist); 
+                    const { isShowAllGenresInOnePlaylist } = useSelector((state) => state.showGenreInSeparatePlaylist);
+                    return (
+                        <>
+                        <AddSong />
+                        <DisplaySongsInTheirOwnPlaylistForEachCategory/> 
+                        // provides (in redux-toolkit-slice): isShowAllGenresInOnePlaylist and also 
+                        // ("L:") 'an array with the categories to show  in their own playlist'. 
+                        {isShowAllGenresInOnePlaylist ? <Playlist playlist={playlist} /> :
+                        <CategorizeSong playlist={playlist} /> } 
+                        // inside categorizeSong import ("L") from redux-toolkit store. Then for each item in the array, map
+                        // over the array with arrays, see next step. 
+                    );
+                }
+
+
+        3. inside component CategorizeSong:
+           a) business logic: create fn 'categorizeByGenre'. Use fn 'filterByGenre' from  component Playlist as a template. 
+              a few things need to happen here: 
+              1) first distinguish between:
+                -  ('M') show all categories together in 1 playlist 
+                versus 
+                - ('N') all other categories in which 1 or more categories are  shown each in their own  playlist. See 'isShowAllGenresInOnePlaylist' below. 
+              2) currently in my template fn 'filterByGenre', 1 array is returned with all selected categories of songs. 
+              3) For condition ('M') code  of fn 'filterByGenre' does what I need. 
+              4) But for condition ('N') I need to create a separate array for each  selected category (e.g. 1 array for blues, 1 array for jazz, etc). So the output in this case needs to be an array of arrays (with each array depicting a separate category). I can refactor the code of fn 'filterByGenre' to do this (and probably use a for loop instead of a for of loop, because I will need the index to split up the playlist array into an array of arrays based on song category).
+              
+              Each of these created arrays (in an array of arrays) will be looped over with a .map fn:
+
+              In component CategorizeSong:
+                {arrayWithSongCategoryArrays.map((arrayWithOneSongCategory, id) => (
+                        <Playlist key={id} item={arrayWithOneSongCategory} />
+                ))}
+                (so fn categorizeByGenre must also provide a key to each array inside this map fn).
+                 const id = Math.floor(Math.random() * 100000) + 1; 
+
+
+              In component Playlist:
+                {arrayWithOneSongCategory.map((song, id) => (
+                        <SongInPlaylist key={id} item={song} />
+                ))}
+              (except for the Playlist now having a prop, the component Playlist should still  work the same (as before the moment 
+               I started to implement the categorize-code functionality))
+              
+              To work one step at a time, I will have  'M' working completely in the songsaver app, before starting with  'N'. 
+
+            (time: 40 min)
+
+        
+        4. lift up playlist state to component Songsaver.js (now in component Playlist.js). Do this by moving  the useSelector hook that connects to the react-toolkit slice ( 10 min)
+        5. put array playlist.js as a prop in component Playlist.js (inside the render-part of component Playlist.js, array playlist.js is going to map to the screen with SongInPlaylist.js)   (10 min)
+        6. delete-song-button  interacts directly with  redux-toolkit slice,  so no refactoring needed. (0 min)
+        7. put the state of select box 'Categorize by Genre' as a dependency in the useEffect hook of component Playlist.js (I do here exactly the same here as when I (in other winc task assignment) put the sort and filter functionality inside this component Playlist.js inside this useEffect hook.)  (10 min)
+        8. give title to each playlist when displayed in their own Playlist-component, e.g. 'Playlist Blues', 'Playlist all genres', 'Playlist Jazz', etc.      (15 min)
+        9. if no song in playlist, display message: 'please enter a song'. (10 min)
+        10. (if time left) Component  Playlist: figure out if useCallback fn is useful on fns sortSong, filterByGenre, filterByRatingStars --> how2: the arguments to each fn, become the dependencies of the Callback fn.   (10 min)
+        11. test (manually) new functionality (during and after the previous steps)  (30 min)
+        12. regression test (15 min)
+
+    * Time to make this design upfront and proof the concept (+ braindump below): 5 hours. 
+    * Time: total time needed to implement: 3 hours &  5 min ( + 100% for unexpected stuff) = 6 hours & 10 min. 
+
+    * contingency plan: inside component Playlist.js and SongInPlaylist.js I could create component 'CategorizeSong'. Disadvantage: see comment in notes  from 'Date June 8' below. 
+
+
+    Braindump of stuff to do when categorize-song-functionality is ready:
+    1. style select boxes (1 styling for all)
+    2. onMouseOver on select boxes: press 'Ctrl' to select multiple options'.  
+    2. use styled component theme provider for default styling: font size, font type, etc.
+    3. media queries (in grid components) for mobile size. 
+
+
+
+# Date June 8 (archive)
 * intro
     This is my plan of how to avoid major refactoring, while and after building sort, filter and categorize functionality on separate feature branches.
     I have checked upfront that my intended solutions to sort, filter and  categorize songs do not conflict in such a way that I need to do a major refactor / overhaul of a previous/ already built functionality (e.g. sort functionality ) after having finished the previous one (e.g.  filter functionality). Some refactoring might still be necessary. The features sort, filter and categorize will be implemented on separate feature branches. 

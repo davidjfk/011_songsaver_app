@@ -1,13 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./counter";
 import playlistReducer from "./playlist";
-import songReducer from "./song";
+import categorizeSongReducer from "./categorizeSong";
 
 export default configureStore({
   reducer: {
-    counter: counterReducer,
     playlist: playlistReducer,
-    song: songReducer
-
+    categorizeSong: categorizeSongReducer
   }
 });
