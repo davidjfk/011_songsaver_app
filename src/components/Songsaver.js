@@ -1,27 +1,21 @@
 import AddSong from '../components/AddSong.js'
 import Playlist from '../components/Playlist.js'
 import CategorizeSong from '../components/CategorizeSong'
-import DisplaySongsInTheirOwnPlaylistForEachCategory from '../components/DisplaySongsInTheirOwnPlaylistForEachCategory'
+import ChooseHowToDisplayTheSongsOfAGenre from '../components/ChooseHowToDisplayTheSongsOfAGenre'
 import { useSelector } from "react-redux"; 
 
 function Songsaver() {
-  
   const { isShowAllGenresInOnePlaylist } = useSelector((state) => state.categorizeSong);
-
   return (
     <>
       <AddSong />
-      <DisplaySongsInTheirOwnPlaylistForEachCategory />
+      <ChooseHowToDisplayTheSongsOfAGenre />
       {isShowAllGenresInOnePlaylist ? 
-        <Playlist genresToCategorizeWith="allCategoriesInOnePlaylist"  /> 
+        <Playlist genresToCategorizeWith="All Genres Together In One Playlist"  /> 
         :
         <CategorizeSong /> 
-        // <Playlist genresToCategorizeWith="allCategoriesInOnePlaylist"  /> 
       } 
     </>
   );
 }
 export default Songsaver;
-
-
-// CategorizeSong

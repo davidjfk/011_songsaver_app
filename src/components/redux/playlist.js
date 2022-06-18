@@ -13,15 +13,12 @@ export const playlistSlice = createSlice({
       state.playlist.push(newSongOnPlaylist);
     },
     deleteSongFromPlaylist: (state, action) => {
-      // console.log('delete', action.payload)
       const indexOfSongToDelete = state.playlist.findIndex(songToDelete => {
         return songToDelete.id === action.payload;
       });
-      // console.log(indexOfSongToDelete)
       state.playlist.splice(indexOfSongToDelete, 1)
     }}
 })
-// Action creators are generated for each case reducer function
 export const { addSongToPlaylist, deleteSongFromPlaylist } = playlistSlice.actions;
 
 export default playlistSlice.reducer;    

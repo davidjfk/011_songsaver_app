@@ -10,28 +10,17 @@ const Playlist = ({genresToCategorizeWith}) => {
     
     const { playlist } = useSelector((state) => state.playlist);
     const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
-    const [sortedAndOrFilteredArrayWithSongs, setSortedAndOrFilteredArrayWithSongs] = useState([]);
+    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [genresToFilterWith, setGenreToFilterWith] = useState([""]);
     const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState([""]);
 
-
-    //2do: connect this fn to the selected option in select box 'categorize by category'. The selected
-    // option can be found in redux-toolkit slice. 
-    // let genresToCategorizeWith = "allCategoriesInOnePlaylist";
-    console.log(`genresToCategorizeWith: `)
-    console.log(genresToCategorizeWith)
     const categorizeByGenre = (playlist, genresToCategorizeWith) => {
-        // categorize is implemented with array method 'filter', but word 'categorize' makes 
-        // the intention of the code clearer. 
-            // without a filter return all data.
-            if (genresToCategorizeWith === "allCategoriesInOnePlaylist") {
-                console.log('line 178: no filter')
+            if (genresToCategorizeWith === "All Genres Together In One Playlist") {
               return playlist;
             }
                                
             const filteredGenres = playlist.filter(
-                (song) => 
-                
+                (song) =>          
                 song.genre.indexOf(genresToCategorizeWith) !== -1 
             );
             return filteredGenres;
@@ -50,7 +39,7 @@ const Playlist = ({genresToCategorizeWith}) => {
             title: 'title',
             artist: 'artist',
             genre: 'genre',
-            // 2do: remove genre from  the list after having completed the winc requirement 'categorize on genre' (on a separate feature branch).
+            // use case: as a user I select 'all genres together in one playlist'. As a next step I can filter out the categories that I am not interested in. 
             rating: 'rating',
         };
         const sortProperty = songPropertiesObject[songObjectKey];  
@@ -92,7 +81,7 @@ const Playlist = ({genresToCategorizeWith}) => {
 
     const filterByGenre = (filteredData, genresToFilterWith) => {
         /* 
-            I have (severely) modified my fn filterObjectsByArrayObjectKey from  winc assignment 'Big Arrays'
+            I have modified my fn filterObjectsByArrayObjectKey from  winc assignment 'Big Arrays'
             ( https://github.com/davidjfk/WincAcademy/tree/master/54-js-webpage-big-arrays-and-objects-David-Sneek )
             to filter by genre on multiple genres at the same time:
         */
@@ -134,17 +123,11 @@ const Playlist = ({genresToCategorizeWith}) => {
 
 
     useEffect(() => {
-            /* 
-            A user expect the playlist to sort first, then to order on genre and finally to filter on rating, so the precedence
-            (user expectation) is from left to right.
-            For this reason in the pipeline I filter on rating first, then filter on genre second and finally sort the playlist.
-            */
             let pipelineData = categorizeByGenre(playlist, genresToCategorizeWith)
             pipelineData = filterByRatingStars(pipelineData, ratingStarsToFilterWith);
             pipelineData = filterByGenre(pipelineData, genresToFilterWith);
             pipelineData = sortPlaylist(pipelineData, songObjectKeyToSortArrayWithSongs);
-            setSortedAndOrFilteredArrayWithSongs(pipelineData);
-
+            setDataToRenderFromUseEffectPipeline(pipelineData);
         }, 
         [songObjectKeyToSortArrayWithSongs, ratingStarsToFilterWith, genresToFilterWith, playlist]
     );
@@ -153,7 +136,7 @@ const Playlist = ({genresToCategorizeWith}) => {
     <>
     <Container> 
         <StyledGridPlaylist>
-            <Intro>Playlist</Intro>
+            <Intro>{genresToCategorizeWith}</Intro>
             <NavigationArea>
                 <Button1>
                     <select                    
@@ -218,9 +201,9 @@ const Playlist = ({genresToCategorizeWith}) => {
                 </Column>
             </Headers>
             <StyledPlaylistArea>
-                {sortedAndOrFilteredArrayWithSongs.map((item, id) => (
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
                         <SongInPlaylist key={id} item={item} />
-                ))}
+                )): <>The playlist {genresToCategorizeWith} is empty. Please add a song.</>}
             </StyledPlaylistArea>
         </StyledGridPlaylist>  
     </Container>
