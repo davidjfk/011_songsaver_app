@@ -2,6 +2,52 @@
 
 # Design / planning:
 
+# Date: June 18
+  Status: winc task categorize is ready.  Last task, left to do is styling, see 2do-list below. 
+  Time to implement: 10 hours (instead of the estimated 5)
+  
+  evaluation:
+  2 things did not go according to plan:
+    nr 1 of 2:
+    see bullit 1 from June 17:
+    instead of: 
+            - show all genres in 1 playlist (default option) ('M')
+            - show all genres, with each genre in its own playlist ('N')
+            - show 1 or more genres in a separate playlist. ('N')
+
+    I only implemented: 
+            - show all genres in 1 playlist (default option) ('M')
+            - show all genres, with each genre in its own playlist ('N')
+    reason:
+            - show 1 or more genres in a separate playlist. ('N') --> this option is already a filter in the component Playlist, so this would be redundant / of little extra value. It would also make the code more complex, so it was not worth it.
+    
+    
+    nr 2 of 2: the useEffect hook in component Playlist required me to change the plan from yesterday:
+    categorize-song-functionality must connect with each pipeline in each useEffect hook for each playlist separately. So if I show all playlists (i.e. 1 playlist for each genre), then the categorize-song-functionality
+    is/stays/becomes part of the local state of each separate playlist. That means that for example in playlist of genre 'blues' I sort on artist from A-Z, while at the same time in e.g. playlist of genre 'jazz' I sort on artist from Z-A. 
+
+    So instead of (see bullit 3 from June 17):
+                 In component CategorizeSong:
+                {arrayWithSongCategoryArrays.map((arrayWithOneSongCategory, id) => (
+                        <Playlist key={id} item={arrayWithOneSongCategory} />
+                ))}
+    this means that instead of passing a playlist of songs filtered on genre from component 'CategorizeSong' into each component 'Playlist', I created the playlist with songs for each genre for each component Playlist inside each component 
+    Playlist itself.  Without this the useEffect hook inside each component Playlist would not have worked. 
+    The preparation from yesterday did allow me to quickly figure out the problem and the solution.  
+
+
+
+    2do-list: (first 4 from braindump from June 17)
+    1. style select boxes (1 styling for all)
+    2. onMouseOver on select boxes: press 'Ctrl' to select multiple options'.  
+    3. use styled component theme provider for default styling: font size, font type, etc.
+    4. media queries (in grid components) for mobile size. 
+    5. in components 'GridNavigation.styled.js' and 'GridPlaylist.styled.js' change the button-element into e.g. a second-element, to make the code more semantic.  
+
+
+
+
+
 # Date: June 17
 * Intro
     goal: implement winc task categorize: each genre gets its own list and the song you add ends up with the respective genre.
