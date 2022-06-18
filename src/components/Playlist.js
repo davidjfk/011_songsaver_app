@@ -6,12 +6,36 @@ import {Column, Intro, Headers, NavigationArea, StyledPlaylistArea, Button1, But
 import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 
-const Playlist = () => {
+const Playlist = ({genresToCategorizeWith}) => {
+    
     const { playlist } = useSelector((state) => state.playlist);
     const [songObjectKeyToSortArrayWithSongs, setSongObjectKeyToSortArrayWithSongs] = useState('');
     const [sortedAndOrFilteredArrayWithSongs, setSortedAndOrFilteredArrayWithSongs] = useState([]);
     const [genresToFilterWith, setGenreToFilterWith] = useState([""]);
     const [ratingStarsToFilterWith, setRatingStarsToFilterWith] = useState([""]);
+
+
+    //2do: connect this fn to the selected option in select box 'categorize by category'. The selected
+    // option can be found in redux-toolkit slice. 
+    // let genresToCategorizeWith = "allCategoriesInOnePlaylist";
+    console.log(`genresToCategorizeWith: `)
+    console.log(genresToCategorizeWith)
+    const categorizeByGenre = (playlist, genresToCategorizeWith) => {
+        // categorize is implemented with array method 'filter', but word 'categorize' makes 
+        // the intention of the code clearer. 
+            // without a filter return all data.
+            if (genresToCategorizeWith === "allCategoriesInOnePlaylist") {
+                console.log('line 178: no filter')
+              return playlist;
+            }
+                               
+            const filteredGenres = playlist.filter(
+                (song) => 
+                
+                song.genre.indexOf(genresToCategorizeWith) !== -1 
+            );
+            return filteredGenres;
+    };
 
 
     const sortPlaylist = (playlist, JsxSelectBoxAttributeValue) => {
@@ -115,7 +139,8 @@ const Playlist = () => {
             (user expectation) is from left to right.
             For this reason in the pipeline I filter on rating first, then filter on genre second and finally sort the playlist.
             */
-            let pipelineData = filterByRatingStars(playlist, ratingStarsToFilterWith);
+            let pipelineData = categorizeByGenre(playlist, genresToCategorizeWith)
+            pipelineData = filterByRatingStars(pipelineData, ratingStarsToFilterWith);
             pipelineData = filterByGenre(pipelineData, genresToFilterWith);
             pipelineData = sortPlaylist(pipelineData, songObjectKeyToSortArrayWithSongs);
             setSortedAndOrFilteredArrayWithSongs(pipelineData);

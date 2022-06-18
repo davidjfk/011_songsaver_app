@@ -22,10 +22,10 @@
     To  implement this:  
     * Inside component Songsaver:
 
-        1. create (grid-based: reuse grid code from other components) child component SelectCategoriesToDisplayInTheirOwnPlaylist. Inside this component, that only contains display logic, create selectbox 'Categorize by Genre' with options:
+        1. create (grid-based: reuse grid code from other components) child component DisplaySongsInTheirOwnPlaylistForEachCategory. Inside this component, that only contains display logic, create selectbox 'Categorize by Genre' with options:
             
             - show all genres in 1 playlist (default option) ('M')
-            - show each genre in its own playlist ('N')
+            - show all genres, with each genre in its own playlist ('N')
             - show 1 or more genres in a separate playlist. ('N')
             I need a boolean to switch between this option ('M') and all other options ('N') in this select box: 'isShowAllGenresInOnePlaylist'. select box 'Categorize by Genre' must set this boolean (based on which option is selected). Next, this boolean must be made available (use redux-toolkit slice with useLocator hook) in component 'Songsaver'.
             
@@ -33,7 +33,7 @@
 
             So select box 'Categorize by Genre' provides 2 pieces of state: one piece will be used in  component Songsaver, and one piece will be used in component 'categorizeSong'. 
             
-           (time: 20 min)
+           (time: 20 min) (time so far: 1.5 hours)
 
         2. create (inside SongSaver) (empty) child  component 'CategorizeSong' that will only contain business logic.  (time: 15 min)
 
@@ -48,7 +48,7 @@
                     return (
                         <>
                         <AddSong />
-                        <SelectCategoriesToDisplayInTheirOwnPlaylist/> 
+                        <DisplaySongsInTheirOwnPlaylistForEachCategory/> 
                         // provides (in redux-toolkit-slice): isShowAllGenresInOnePlaylist and also 
                         // ("L:") 'an array with the categories to show  in their own playlist'. 
                         {isShowAllGenresInOnePlaylist ? <Playlist playlist={playlist} /> :
@@ -77,6 +77,8 @@
                         <Playlist key={id} item={arrayWithOneSongCategory} />
                 ))}
                 (so fn categorizeByGenre must also provide a key to each array inside this map fn).
+                 const id = Math.floor(Math.random() * 100000) + 1; 
+
 
               In component Playlist:
                 {arrayWithOneSongCategory.map((song, id) => (
