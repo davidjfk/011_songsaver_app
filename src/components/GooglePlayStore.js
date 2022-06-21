@@ -1,8 +1,8 @@
-import { Container } from './styles/Container.styled'
+import { Container } from './styles/Container.styled';
 import React, { useEffect } from "react";
-// import { StyledFaTimes } from './styles/FaTimes.styled'
-import { FcGoogle} from 'react-icons/fc'
-import { FaGooglePlay } from 'react-icons/fa'
+import { FcGoogle} from 'react-icons/fc';
+import { FaGooglePlay } from 'react-icons/fa';
+import { StyledGooglePlayStore } from './styles/GooglePlayStore.styled';
 
 const GooglePlayStore = () => {
     useEffect(() => {
@@ -11,11 +11,11 @@ const GooglePlayStore = () => {
     
     return (
       <Container>
-        <div>
+        <StyledGooglePlayStore>
           <FcGoogle/>
           <span>    On Google Play search for 'song app'   </span>
           <FaGooglePlay />
-        </div>      
+        </StyledGooglePlayStore>      
         </Container> 
     )
   };

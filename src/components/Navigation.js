@@ -1,28 +1,34 @@
 import { NavLink } from 'react-router-dom';
-import {StyledNavigation}  from './styles/Navigation.styled';
-import {NavigationArea, Button1, Button2, Button3} from './styles/GridNavigation.styled'
+import {NavigationArea, Section1, Section2, Section3} from './styles/GridNavigation.styled'
 import {Container} from './styles/Container.styled'
+import {StyledNavLink} from './styles/NavLink.styled'
 
 const Navigation = () => {
   return (
       <>
       <Container> 
           <NavigationArea>
-              <Button1>          
-                <NavLink  to='/'>
-                  Songsaver
-                </NavLink>
-              </Button1>
-              <Button2>
-                <NavLink  to='/about'>
-                  About
-                </NavLink>
-              </Button2>
-              <Button3>
-                <NavLink to='/googleplaystore'>
-                  Google Play
-                </NavLink>
-              </Button3>             
+              <Section1>  
+              <StyledNavLink>       
+                  <NavLink  to='/'>
+                    Songsaver
+                  </NavLink>
+                </StyledNavLink>
+              </Section1>
+              <Section2>
+                <StyledNavLink>  
+                  <NavLink  to='/about'>
+                    About
+                  </NavLink>
+                </StyledNavLink>  
+              </Section2>
+              <Section3>
+                <StyledNavLink>  
+                  <NavLink to='/googleplaystore'>
+                    Google Play
+                  </NavLink>
+                </StyledNavLink>  
+              </Section3>             
           </NavigationArea>
       </Container>
       </>

@@ -38,14 +38,14 @@
 
 
     2do-list: (first 4 from braindump from June 17)
-    1. style select boxes (1 styling for all)
-    2. onMouseOver on select boxes: press 'Ctrl' to select multiple options'.  
-    3. use styled component theme provider for default styling: font size, font type, etc.
-    4. media queries (in grid components) for mobile size. 
-    5. in components 'GridNavigation.styled.js' and 'GridPlaylist.styled.js' change the button-element into e.g. a second-element, to make the code more semantic.  
+    1. style select boxes (1 styling for all)  (10m)
+    2. onMouseOver on select boxes: press 'Ctrl' to select multiple options'.  (10m)
+    3. use styled component theme provider for default styling: font size, font type, etc. (30m)
+    4. media queries (in grid components) for mobile size. (10m)
+    5. in components 'GridNavigation.styled.js' and 'GridPlaylist.styled.js' change the button-element into e.g. a second-element, to make the code more semantic.  (10m)
 
 
-
+    * Time: total time needed to implement: 1 hours &  10 min ( + 200% for unexpected stuff) = 3 hours & 30 min. 
 
 
 # Date: June 17
