@@ -3,10 +3,12 @@ import {Container} from './styles/Container.styled'
 import {StyledGridAddSong} from './styles/GridAddSong.styled'
 import {Column, Intro, Form} from './styles/GridAddSong.styled'
 import {StyledButton} from './styles/Button.styled'
+import {StyledInputfield} from './styles/Inputfield.styled'
+import {StyledSelectbox} from './styles/Selectbox.styled'
 import { useDispatch } from "react-redux";
 import { addSongToPlaylist } from "./redux/playlist";
-
 import { useState } from 'react'
+
 
 const AddSong = () => {
     const [title, setSongTitle] = useState('')
@@ -59,29 +61,26 @@ const AddSong = () => {
             <Intro>Add Song</Intro>
             <Form>
                 <Column>
-                    <input  
-                        type='text'
-                        placeholder='Add Song Title'
-                        value={title}
-                        onChange={(e) => setSongTitle(e.target.value)}
-                        style={{fontSize: "1.6rem"}}                        
+                    <StyledInputfield
+                            type='text'
+                            placeholder='Add Song Title'
+                            value={title}
+                            onChange={(e) => setSongTitle(e.target.value)}                              
                     />
                 </Column>
                 <Column>
-                    <input
+                    <StyledInputfield
                             type='text'
                             placeholder='Add artist'
                             value={artist}
-                            onChange={(e) => setArtist(e.target.value)}
-                            style={{fontSize: "1.6rem"}}  
+                            onChange={(e) => setArtist(e.target.value)} 
                         />
                 </Column>
                 <Column>
-                    <select 
+                    <StyledSelectbox 
                         value={genre}
                         onChange={(e) => setGenre(e.target.value)}
                         name="genre"
-                        style={{fontSize: "1.6rem"}}  
                     > 
                         <option value="default" disabled hidden>
                             genre
@@ -91,15 +90,14 @@ const AddSong = () => {
                         <option value="motown">Motown</option>
                         <option value="pop">Pop</option>
                         <option value="reggae">Reggae</option>
-                        <option value="song without genre">song without genre</option>
-                    </select>
+                        <option value="song without genre">no genre</option>
+                    </StyledSelectbox>
                 </Column>
                 <Column>
-                    <select 
+                    <StyledSelectbox 
                         value={rating}
                         onChange={(e) => setRating(e.target.value)}
                         name="rating"
-                        style={{fontSize: "1.6rem"}}  
                     > 
                         <option value="default" disabled hidden>
                             song rating
@@ -109,7 +107,7 @@ const AddSong = () => {
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
-                    </select>
+                    </StyledSelectbox>
                 </Column>
                 <Column>
                     <StyledButton onClick={onSubmit}>

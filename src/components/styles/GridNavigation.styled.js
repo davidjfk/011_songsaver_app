@@ -1,50 +1,29 @@
 import styled from "styled-components";
 
-export const StyledGridNavigation = styled.div`
-  display: grid;
-  height: 30%;
-  color: white;
-
-  grid-template-areas:
-      "navigation navigation navigation navigation"
-      ;
-  text-align: center;
-  grid-gap: 0.25rem;
-
-`;
-
 export const NavigationArea = styled.nav`
-  grid-area: navigation;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center;  
   gap: 0.25rem;
-  padding: 0.25rem;
-  align-items: center;
+  padding: 0.1rem;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
+  font-family: ${({ theme}) => theme.font };
+  font-size: ${({ theme}) => theme.fontSize.default };
 `;
   
-export const Button1 = styled.button`
-  background: #a6b8b9;
-  padding: 0.25rem;
+export const Section1 = styled.section`
+  background: ${({ theme}) => theme.colors.bluegrey };
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   width: 100%;
-  height: 100%;
-  font-size: 1.6rem;
+  height: 2.8rem;
+  border: 1px solid black;
 `;
-export const Button2 = styled(Button1)``;
-export const Button3 = styled(Button1)``;
-
-
-export const Row = styled.div`
-  display: flex;
-`
-
-export const Column = styled.div`
-  flex: 1;
-`
-
-
-
-
+export const Section2 = styled(Section1)``;
+export const Section3 = styled(Section1)``;
 
 
 

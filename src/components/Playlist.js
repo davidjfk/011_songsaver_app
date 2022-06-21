@@ -2,9 +2,10 @@ import React from 'react'
 import SongInPlaylist from './SongInPlaylist.js'
 import {Container} from './styles/Container.styled'
 import {StyledGridPlaylist} from './styles/GridPlaylist.styled'
-import {Column, Intro, Headers, NavigationArea, StyledPlaylistArea, Button1, Button2, Button3} from './styles/GridPlaylist.styled'
+import {Column, Intro, Headers, FormControlArea, StyledPlaylistArea, Section1, Section2, Section3} from './styles/GridPlaylist.styled'
 import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
+import {StyledSelectbox} from './styles/Selectbox.styled'  
 
 const Playlist = ({genresToCategorizeWith}) => {
     
@@ -39,7 +40,6 @@ const Playlist = ({genresToCategorizeWith}) => {
             title: 'title',
             artist: 'artist',
             genre: 'genre',
-            // use case: as a user I select 'all genres together in one playlist'. As a next step I can filter out the categories that I am not interested in. 
             rating: 'rating',
         };
         const sortProperty = songPropertiesObject[songObjectKey];  
@@ -129,17 +129,28 @@ const Playlist = ({genresToCategorizeWith}) => {
             pipelineData = sortPlaylist(pipelineData, songObjectKeyToSortArrayWithSongs);
             setDataToRenderFromUseEffectPipeline(pipelineData);
         }, 
-        [songObjectKeyToSortArrayWithSongs, ratingStarsToFilterWith, genresToFilterWith, playlist]
+        [genresToCategorizeWith, songObjectKeyToSortArrayWithSongs, ratingStarsToFilterWith, genresToFilterWith, playlist]
     );
+
+
+    const [isHovering, setIsHovering] = useState(false);
+
+    const handleMouseOver = () => {
+      setIsHovering(true);
+    };
+  
+    const handleMouseOut = () => {
+      setIsHovering(false);
+    };
 
     return (
     <>
     <Container> 
         <StyledGridPlaylist>
             <Intro>{genresToCategorizeWith}</Intro>
-            <NavigationArea>
-                <Button1>
-                    <select                    
+            <FormControlArea>
+                <Section1>
+                    <StyledSelectbox                  
                         onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
                     >                        
                         <option value="" >Sort by:</option>
@@ -152,13 +163,18 @@ const Playlist = ({genresToCategorizeWith}) => {
                         <option value="genre descending" >Genre z-a</option>
                         <option value="rating ascending" >Rating 1-5</option>
                         <option value="rating descending" >Rating 5-1</option>
-                    </select>
-                </Button1>
-                <Button2>
-                    <select 
+                    </StyledSelectbox>
+                </Section1>
+                <Section2>
+                    <div>
+                    <StyledSelectbox 
                         multiple={true}
+                        onMenuOpen
+                        onMenuClose
                         value={genresToFilterWith}
-                        onChange={(event) => handleFilterGenreChange(event)  }                 
+                        onChange={(event) => handleFilterGenreChange(event)  }  
+                        onMouseOver={handleMouseOver} 
+                        onMouseOut={handleMouseOut}               
                     >                        
                         <option value="" >Filter by Genre:</option>
                         <option value="" >do not filter</option>
@@ -167,14 +183,19 @@ const Playlist = ({genresToCategorizeWith}) => {
                         <option value="motown" >motown</option>
                         <option value="pop" >pop</option>
                         <option value="reggae" >reggae</option>
-                    </select>
-
-                </Button2>
-                <Button3>
-                    <select 
+                    </StyledSelectbox>
+                    {isHovering && <h3>Press Ctrl to select multiple genres</h3>}
+                    </div>
+                </Section2>
+                <Section3>
+                    <div>
+                    <StyledSelectbox 
                         multiple={true}
+                        onMenuOpen
                         value={ratingStarsToFilterWith}
-                        onChange={(e) => handleFilterStarsChange(e)  }                 
+                        onChange={(e) => handleFilterStarsChange(e)  }     
+                        onMouseOver={handleMouseOver} 
+                        onMouseOut={handleMouseOut}                 
                     >                        
                         <option value="" >Filter by Rating:</option>
                         <option value="" >do not filter</option>
@@ -183,27 +204,29 @@ const Playlist = ({genresToCategorizeWith}) => {
                         <option value="3" >3 stars</option>
                         <option value="4" >4 stars</option>
                         <option value="5" >5 stars</option>
-                    </select>
-                </Button3>
-            </NavigationArea>
+                    </StyledSelectbox>
+                    {isHovering && <h3>Press Ctrl to select multiple ratings</h3>}
+                    </div>
+                </Section3>
+            </FormControlArea>
             <Headers>
                 <Column>
-                    <h1>Song title</h1>
+                    <span>Song title</span>
                 </Column>
                 <Column>
-                    <h1>artist</h1>
+                    <span>Artist</span>
                 </Column>
                 <Column>
-                    <h1>genre</h1>
+                    <span>Genre</span>
                 </Column>
                 <Column>
-                    <h1>rating</h1>
+                    <span>Rating</span>
                 </Column>
             </Headers>
             <StyledPlaylistArea>
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
                         <SongInPlaylist key={id} item={item} />
-                )): <>The playlist {genresToCategorizeWith} is empty. Please add a song.</>}
+                )): <>The playlist -- {genresToCategorizeWith} -- is empty. Please add a song.</>}
             </StyledPlaylistArea>
         </StyledGridPlaylist>  
     </Container>

@@ -1,7 +1,13 @@
 import styled from 'styled-components'
 
 export const StyledInputfield = styled.input`
-  font-size: 20px;
-  background-color: blue;
-  //2do later: move inline css into this component.
+  font-size: ${({ theme}) => theme.fontSize.default };
+  padding-left: 1rem;
+  color: black;
+  ::placeholder {
+    color: black;
+  }
+  &:hover {
+    background-color: ${({ theme}) => theme.colors.onHoverBackground };
+  }
 `

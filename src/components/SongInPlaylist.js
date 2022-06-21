@@ -10,21 +10,29 @@ const SongInPlaylist = ({item}) => {
   const dispatch = useDispatch();
   return (
     <Row>
-      <Column>
-      <h1>{item.title}</h1>
-      </Column>
-      <Column>
-      <h1>{item.artist}</h1>
-      </Column>
-      <Column>
-      <h1>{item.genre}</h1>
-      </Column>
-      <Column>
-      <h1>{item.rating} 
-        <StyledFaTimes>
-          <FaTimes onClick={() => dispatch(deleteSongFromPlaylist(item.id))} />
-        </StyledFaTimes></h1>
-      </Column>
+        <Column>
+          <StyledSongInPlaylist>
+            {item.title}
+          </StyledSongInPlaylist>
+        </Column>
+        <Column>
+          <StyledSongInPlaylist>
+            {item.artist}
+          </StyledSongInPlaylist>
+        </Column>
+        <Column>
+          <StyledSongInPlaylist>
+            {item.genre}
+          </StyledSongInPlaylist>
+        </Column>
+        <Column>
+          <StyledSongInPlaylist>
+            {item.rating}
+            <StyledFaTimes>
+              <FaTimes onClick={() => dispatch(deleteSongFromPlaylist(item.id))} />
+            </StyledFaTimes>
+            </StyledSongInPlaylist>
+        </Column>
     </Row>
   )
 }
